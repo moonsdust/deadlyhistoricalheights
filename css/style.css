@@ -66,3 +66,8 @@ body {
 h1, h2, h3 {
   margin-bottom: 20px;
 }
+
+.insight-viz-2-subtitle{
+  font-weight: 600;
+  font-size: 14px;
+}
