@@ -11,14 +11,14 @@ class StackedAreaChart {
         this.displayData = [];
         this.filter = "";
     
-        let colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a'];
+        let colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a', '#6b4c9a', '#ffcc33'];
     
         // grab all the keys from the key value pairs in data (filter out 'year' ) to get a list of categories
         this.dataCategories = Object.keys(this.data[0]).filter(d=>d !== "Year")
     
         // prepare colors for range
-        let colorArray = this.dataCategories.map( (d,i) => {
-            return colors[i%10]
+        let colorArray = this.dataCategories.map((d,i) => {
+            return colors[i % colors.length]
         })
     
         // Set ordinal color scale
@@ -61,7 +61,7 @@ class StackedAreaChart {
         // Scales and axes
         vis.x = d3.scaleTime()
             .range([0, vis.width])
-            .domain([0, d3.max(vis.data, d=> d.Year)]);
+            .domain(d3.extent(vis.data, d=> d.Year));
 
         vis.y = d3.scaleLinear()
             .range([vis.height, 0]);
@@ -196,11 +196,12 @@ class Timeline {
 			.attr("height", vis.height + vis.margin.top + vis.margin.bottom)
 			.append("g")
 			.attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
+        
 
 		// Scales and axes
 		vis.x = d3.scaleTime()
 			.range([0, vis.width])
-			.domain(d3.extent(vis._displayData, function(d) { return d.Year; }));
+			.domain(d3.extent(vis._displayData, d => d.Year));
 
 		vis.y = d3.scaleLinear()
 			.range([vis.height, 0])
@@ -231,6 +232,7 @@ class Timeline {
 			.attr("class", "x-axis axis")
 			.attr("transform", "translate(0," + vis.height + ")")
 			.call(vis.xAxis);
+
 	}
 }
 
