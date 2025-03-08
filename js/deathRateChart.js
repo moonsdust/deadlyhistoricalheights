@@ -10,16 +10,14 @@ class DeathRateChart {
      *                              { died: "TRUE" or "FALSE", ... }
      */
     constructor(parentId, membersData) {
-        // 1. Store references to DOM element and data
         this.parentElement = document.getElementById(parentId);
         this.membersData = membersData;
 
-        // 2. Define chart dimensions, margins, etc.
         this.margin = { top: 20, right: 20, bottom: 20, left: 20 };
         this.width = 800 - this.margin.left - this.margin.right;
         this.height = 400 - this.margin.top - this.margin.bottom;
 
-        // 3. Initialize the visualization
+        // Initialize the visualization
         this.initVis();
     }
 
