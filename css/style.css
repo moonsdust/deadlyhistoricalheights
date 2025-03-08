@@ -69,5 +69,11 @@ h1, h2, h3 {
 
 .insight-viz-2-subtitle{
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
+}
+
+.viz-title{
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: underline;
 }

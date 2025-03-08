@@ -11,15 +11,15 @@ class StackedAreaChart {
         this.displayData = [];
         this.filter = "";
     
-        let colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a', '#6b4c9a', '#ffcc33'];
+        let colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b',
+            '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#ffbb78', '#98df8a'];
+        
     
         // grab all the keys from the key value pairs in data (filter out 'year' ) to get a list of categories
         this.dataCategories = Object.keys(this.data[0]).filter(d=>d !== "Year")
     
         // prepare colors for range
-        let colorArray = this.dataCategories.map((d,i) => {
-            return colors[i % colors.length]
-        })
+        let colorArray = this.dataCategories.map((d,i) => colors[i % colors.length]);
     
         // Set ordinal color scale
         this.colorScale = d3.scaleOrdinal()
@@ -205,15 +205,15 @@ class Timeline {
 
 		vis.y = d3.scaleLinear()
 			.range([vis.height, 0])
-			.domain([0, d3.max(vis._displayData, function(d) { return d.TotalDeaths; })]);
+			.domain(d3.extent(vis._displayData, d => d.TotalDeaths));
 
 		vis.xAxis = d3.axisBottom()
 			.scale(vis.x);
 
 		vis.area = d3.area()
-			.x(function(d) { return vis.x(d.Year); })
+			.x(d => vis.x(d.Year))
 			.y0(vis.height)
-			.y1(function(d) { return vis.y(d.TotalDeaths); });
+			.y1(d => vis.y(d.TotalDeaths));
 
 		vis.svg.append("path")
 			.datum(vis._displayData)
