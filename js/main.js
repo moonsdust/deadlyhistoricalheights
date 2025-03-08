@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * *
-*           MAIN           *
+ChatGPT was used to assist in the development of this project.
 * * * * * * * * * * * * * */
 
 // init global variables, switches, helper functions
