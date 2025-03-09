@@ -8,10 +8,13 @@ class DeathRateChart {
      * @param {Array} membersData - Array of objects from members.csv
      *                              Each object should have at least:
      *                              { died: "TRUE" or "FALSE", ... }
+     * @param {Array} displayData - Array containing mountain peaks with the highest 
+     *                              and lowest rates of deaths and their own arrays 
      */
     constructor(parentId, membersData) {
         this.parentElement = document.getElementById(parentId);
         this.membersData = membersData;
+        this.displayData = [];
 
         this.margin = { top: 20, right: 20, bottom: 20, left: 20 };
         this.width = 800 - this.margin.left - this.margin.right;
@@ -46,8 +49,6 @@ class DeathRateChart {
 
         // Initalize new array for all mountain peak (peak_name) and the information we need for the visualization
         vis.allMountainPeakDeathRateInfo = {};
-        // Array for mountain peaks with the highest and lowest rates of death
-        vis.displayMountainPeakDeathRateInfo = {};
 
         // Filter out rows where there is N/A from highpoint_metres, peak_name, and died 
 
