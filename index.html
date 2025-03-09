@@ -71,12 +71,23 @@
       </div>
       <!-- Visualization Pair 2 -->
       <div class="viz-section">
-        <div class="viz" id="insight-viz-2">
+        <div class="viz" id="insight-viz-2" style="flex-direction: column;">
+          <div class="viz-title">Leading Causes of Death</div>
+          <div class="viz" id="insight-viz-2-viz"></div>
+          <div class="insight-viz-2-subtitle">Click on a curve to focus on a specific cause of death</div> 
+          <div class="viz" id="insight-viz-2-timeline"></div>
           <!-- Rising insights visualization 2 placeholder -->
+          <div class="insight-viz-2-subtitle">Brush over timeline to change the years of interest</div> 
+          
         </div>
+
         <div class="description">
           <p>
-            Description for rising insights visualization 2.
+            Falling is the leading cause of death for expeditions in the Himalayas. 
+            This tells us that despite the probable profiency of climbers, the treks 
+            of the Himalayas are still quite dangerous and climbers must be cautious 
+            in their trip.
+
           </p>
         </div>
       </div>
@@ -171,6 +182,7 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <!-- Custom JS -->
+  <script src="js/stackedAreaChart.js"></script>
   <script src="js/main.js"></script>
   <script src="js/seasonChart.js"></script>
 </body>
