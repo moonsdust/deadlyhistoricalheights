@@ -28,5 +28,5 @@ function initMainPage(allDataArray) {
     membersData = allDataArray[1];
     peaksData = allDataArray[2];
     seasonChart = new SeasonChart("main-viz-3", membersData);
-    deathRateChart = new DeathRateChart("main-viz-1", membersData);
+    deathRateChart = new DeathRateChart("main-viz-2", membersData);
 }
