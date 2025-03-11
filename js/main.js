@@ -41,7 +41,7 @@ function initMainPage(allDataArray) {
     guessLineChart = new GuessLineChart("main-viz-4", guessLineChartData);
 }
 
-function setupStackedAreaChartData(rawData) {
+function setupStackedAreaChartData(data) {
     let parseDate = d3.timeParse("%Y");
 
     let preparedData = {
@@ -49,21 +49,15 @@ function setupStackedAreaChartData(rawData) {
         years: []
     };
 
-    let yearMap = {}; // Stores total deaths per year
-    let causeMap = {}; // Stores deaths by cause per year
-    let minYear = Infinity, maxYear = -Infinity;
+    let yearMap = {}; 
+    let causeMap = {};
+    const minYear = 1905, maxYear = 2019;
 
-    // Process raw data
-    rawData.forEach(d => {
+    data.forEach(d => {
         let year = parseInt(d.year);
         let cause = d.death_cause?.trim().toLowerCase();
 
-        // Skip if cause is "na"
         if (cause === "na") return;
-
-        // Update min and max year for continuity
-        if (year < minYear) minYear = year;
-        if (year > maxYear) maxYear = year;
 
         if (!yearMap[year]) {
             yearMap[year] = { Year: parseDate(year.toString()), TotalDeaths: 0 };
@@ -73,27 +67,23 @@ function setupStackedAreaChartData(rawData) {
             causeMap[year] = { Year: parseDate(year.toString()) };
         }
 
-        // Increase death count for this cause
         causeMap[year][cause] = (causeMap[year][cause] || 0) + 1;
         yearMap[year].TotalDeaths += 1;
     });
 
-    // Get all unique causes of death (excluding "na")
-    let allCauses = new Set(rawData.map(d => d.death_cause?.trim().toLowerCase()).filter(c => c && c !== "na"));
+    let allCauses = new Set(data.map(d => d.death_cause?.trim().toLowerCase()).filter(c => c && c !== "na"));
 
-    // Ensure every year has all causes
     for (let year = minYear; year <= maxYear; year++) {
         if (!causeMap[year]) {
             causeMap[year] = { Year: parseDate(year.toString()) };
         }
         allCauses.forEach(cause => {
             if (!causeMap[year][cause]) {
-                causeMap[year][cause] = 0; // Fill missing causes
+                causeMap[year][cause] = 0;
             }
         });
     }
 
-    // Convert to array format for visualization
     preparedData.layers = Object.values(causeMap).sort((a, b) => a.Year - b.Year);
     preparedData.years = Object.values(yearMap).sort((a, b) => a.Year - b.Year);
     return preparedData;
@@ -102,13 +92,12 @@ function setupStackedAreaChartData(rawData) {
 
 function setupGuessLineChartData(membersData) {
     let yearMap = {};
-    const minYear = 1905, maxYear = 2019; // Fixed range
+    const minYear = 1905, maxYear = 2019;
 
-    // Process each row in membersData
     membersData.forEach(d => {
         let year = parseInt(d.year);
-        if (isNaN(year) || year < minYear || year > maxYear) return; // Ignore out-of-range years
-        let died = d.died && d.died.toLowerCase() === "true"; // Check if died is "true"
+        if (isNaN(year) || year < minYear || year > maxYear) return; 
+        let died = d.died && d.died.toLowerCase() === "true";
 
         if (!yearMap[year]) {
             yearMap[year] = { Year: d3.timeParse("%Y")(year.toString()), totalMembers: 0, totalDeaths: 0 };
@@ -126,13 +115,12 @@ function setupGuessLineChartData(membersData) {
         }
     }
 
-    // Convert to array format & calculate death rate
     let deathRateData = Object.values(yearMap)
         .map(d => ({
             Year: d.Year,
-            DeathRate: d.totalMembers > 0 ? d.totalDeaths / d.totalMembers : 0 // Avoid division by zero
+            DeathRate: d.totalMembers > 0 ? d.totalDeaths / d.totalMembers : 0
         }))
-        .sort((a, b) => a.Year - b.Year); // Sort chronologically
+        .sort((a, b) => a.Year - b.Year);
 
     return deathRateData;
 }
