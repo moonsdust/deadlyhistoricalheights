@@ -14,7 +14,7 @@ class DeathRateChart {
 
         this.margin = { top: 20, right: 20, bottom: 20, left: 20 };
         this.width = 800 - this.margin.left - this.margin.right;
-        this.height = 400 - this.margin.top - this.margin.bottom;
+        this.height = 1000 - this.margin.top - this.margin.bottom;
 
         this.innerRadius = 90;
         this.outerRadius = Math.min(this.width, this.height) / 2;
@@ -158,8 +158,10 @@ class DeathRateChart {
         vis.outsideBars.enter().append("path")
             // 3. Enter and update 
             .merge(vis.outsideBars)
+            .transition()
+            .duration(400)
             // Position and style 
-            .attr("fill", "#ef8a62")
+            .attr("fill", "#D7263D")
             .attr("class", "outside-bars")
             .attr("d", vis.arcOuter);
 
@@ -186,14 +188,44 @@ class DeathRateChart {
         vis.insideBars.enter().append("path")
             // 3. Enter and update 
             .merge(vis.insideBars)
+            .transition()
+            .duration(400)
             // Position and style 
-            .attr("fill", "#91bfdb")
+            .attr("fill", "#2660A4")
             .attr("class", "outside-bars")
             .attr("d", vis.arcInner);
 
       	// 4. Remove any extra paths that don't have data attached to them
         vis.insideBars.exit().remove();
 
+        // Add labels 
+        // Code from: https://d3-graph-gallery.com/graph/circular_barplot_double.html
+		// and labels for each bar
+		let labelsForBars = vis.svg.selectAll(".bar-label")
+			.data(vis.displayData);
+        
+        labelsForBars.enter().append("text")
+            .attr("class", "bar-label")
+            .merge(labelsForBars)
+            .transition()
+            .duration(500)
+            .attr("text-anchor", d => (vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
+            .attr("transform", d => {
+                let angle = (vis.x(d.peak_name) + vis.x.bandwidth() / 2) * 180 / Math.PI - 90;
+                // Figure out if the text should be rotated upside down
+                let flipRotation = ((vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI) ? 180 : 0;
+                // Apply the flip rotation to the angle
+                let finalAngle = angle + flipRotation;
+                let radius = vis.yOuter(d.death_count_peak) + 20;
+                // Correct transformation: first move outward, then rotate
+                return `translate(${Math.cos(angle * Math.PI / 180) * radius}, ${Math.sin(angle * Math.PI / 180) * radius}) rotate(${finalAngle})`;
+            })
+            .text(d => d.peak_name)
+            .style("font-size", "11px")
+            .attr("alignment-baseline", "middle");
+
+		// Remove extra labels that don't have data attached to them
+		labelsForBars.exit().remove();
 
 
 
