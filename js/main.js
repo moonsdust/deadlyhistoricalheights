@@ -32,7 +32,7 @@ function initMainPage(allDataArray) {
     let stackedAreaChartData = setupStackedAreaChartData(membersData);
     let guessLineChartData =  setupGuessLineChartData(membersData)
 
-    console.log(guessLineChartData);
+    // console.log(guessLineChartData);
 
 
     seasonChart = new SeasonChart("main-viz-3", membersData);
