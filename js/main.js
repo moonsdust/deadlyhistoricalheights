@@ -5,6 +5,7 @@ ChatGPT was used to assist in the development of this project.
 // init global variables, switches, helper functions
 let seasonChart;
 let stackedAreaChart, stackedAreaChartTimeline;
+let guessLineChart;
 
 
 
@@ -29,9 +30,15 @@ function initMainPage(allDataArray) {
     let membersData = allDataArray[1];
     let peaksData = allDataArray[2];
     let stackedAreaChartData = setupStackedAreaChartData(membersData);
+    let guessLineChartData =  setupGuessLineChartData(membersData)
+
+    console.log(guessLineChartData);
+
+
     seasonChart = new SeasonChart("main-viz-3", membersData);
     stackedAreaChart = new StackedAreaChart("insight-viz-2-viz", stackedAreaChartData.layers);
     stackedAreaChartTimeline = new Timeline("insight-viz-2-timeline", stackedAreaChartData.years);
+    guessLineChart = new GuessLineChart("main-viz-4", guessLineChartData);
 }
 
 function setupStackedAreaChartData(rawData) {
@@ -89,13 +96,46 @@ function setupStackedAreaChartData(rawData) {
     // Convert to array format for visualization
     preparedData.layers = Object.values(causeMap).sort((a, b) => a.Year - b.Year);
     preparedData.years = Object.values(yearMap).sort((a, b) => a.Year - b.Year);
-
-    console.log(preparedData);
-
     return preparedData;
 }
 
 
+function setupGuessLineChartData(membersData) {
+    let yearMap = {};
+    const minYear = 1905, maxYear = 2019; // Fixed range
+
+    // Process each row in membersData
+    membersData.forEach(d => {
+        let year = parseInt(d.year);
+        if (isNaN(year) || year < minYear || year > maxYear) return; // Ignore out-of-range years
+        let died = d.died && d.died.toLowerCase() === "true"; // Check if died is "true"
+
+        if (!yearMap[year]) {
+            yearMap[year] = { Year: d3.timeParse("%Y")(year.toString()), totalMembers: 0, totalDeaths: 0 };
+        }
+
+        yearMap[year].totalMembers += 1;
+        if (died) {
+            yearMap[year].totalDeaths += 1;
+        }
+    });
+
+    for (let year = minYear; year <= maxYear; year++) {
+        if (!yearMap[year]) {
+            yearMap[year] = { Year: d3.timeParse("%Y")(year.toString()), totalMembers: 0, totalDeaths: 0 };
+        }
+    }
+
+    // Convert to array format & calculate death rate
+    let deathRateData = Object.values(yearMap)
+        .map(d => ({
+            Year: d.Year,
+            DeathRate: d.totalMembers > 0 ? d.totalDeaths / d.totalMembers : 0 // Avoid division by zero
+        }))
+        .sort((a, b) => a.Year - b.Year); // Sort chronologically
+
+    return deathRateData;
+}
 
 
 
