@@ -14,11 +14,14 @@ class DeathRateChart {
     constructor(parentId, membersData) {
         this.parentElement = document.getElementById(parentId);
         this.membersData = membersData;
-        this.displayData = [];
+        this.displayData = membersData;
 
         this.margin = { top: 20, right: 20, bottom: 20, left: 20 };
         this.width = 800 - this.margin.left - this.margin.right;
         this.height = 400 - this.margin.top - this.margin.bottom;
+
+        this.innerRadius = 90;
+        this.outerRadius = Math.min(vis.width, vis.height) / 2;
 
         // Initialize the visualization
         this.initVis();
@@ -31,7 +34,22 @@ class DeathRateChart {
             .attr("width", vis.width + vis.margin.left + vis.margin.right)
             .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
             .append("g")
-            .attr("transform", `translate(${this.margin.left}, ${vis.margin.top})`);
+            .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
+
+        // Define x scale 
+        vis.x = d3.scaleBand()
+            .range([0, 2 * Math.PI]);
+        
+        vis.svg.append("g")
+            .attr("class", "y-axis axis");
+
+        // Define y scales
+        // Y-scale for outer bar 
+        vis.yOuter= d3.scaleRadial()
+            .range([innerRadius, outerRadius]);
+        // Y-scale for inner bar 
+        vis.yInner= d3.scaleRadial()
+            .range([innerRadius, 5]);
 
         // Initalize tooltip
         
@@ -47,34 +65,91 @@ class DeathRateChart {
     wrangleData() {
         let vis = this;
 
-        // Initalize new array for all mountain peak (peak_name) and the information we need for the visualization
-        vis.allMountainPeakDeathRateInfo = {};
+        // Filter out rows where there is NaN from highpoint_metres (Highest height reached by climbers), peak_name, and died 
+        vis.displayData = vis.membersData.filter(d => ((!isNaN(d.highpoint_metres) || !isNaN(d.peak_name)) || !isNaN(d.died)));
 
-        // Filter out rows where there is N/A from highpoint_metres, peak_name, and died 
+        // Convert to highpoint_metres to numeric and set died == TRUE to 1 and 0 others 
+        vis.displayData.forEach(d => {
+            d.highpoint_metres = +d.highpoint_metres;
+            if (d.died == "TRUE") {
+                d.died = 1;
+            }
+            else {
+                d.died = 0;
+            }
+        });
 
-        // Set died == TRUE to 1 and 0 others 
+        // Group by peak_name and get number of expeditions for that peak
+        let tempDataExpeditionCount = d3.rollup(vis.displayData, leaves => leaves.length, d => d["peak_name"]);
+        tempDataExpeditionCount = Array.from(tempDataExpeditionCount, ([peak_name, expedition_count_peak]) => ({peak_name, expedition_count_peak}));
 
-        // Compute the death rate (died == TRUE / length of members.csv) * 100
+        // Make shallow copy of vis.displayData
+        let shallowCopyFilteredData = vis.displayData.map(data => data);
+        // Filter only for data where died == 1 (TRUE)
+        shallowCopyFilteredData = shallowCopyFilteredData.filter(d => (d["died"] == 1));
+        // Group by peak_name and get number of died == 1 (TRUE) for that peak
+        let tempDataDeathCount = d3.rollup(shallowCopyFilteredData, leaves => leaves.length, d => d["peak_name"]);
+        tempDataDeathCount = Array.from(tempDataDeathCount, ([peak_name, expedition_death_peak]) => ({peak_name, expedition_death_peak}));
 
-        // Obtain the sum of all climbers who have died or not (Number of people who have climbed that peak)
+        // Combine all data together with the existing displayData  
+        vis.displayData.map(function(d) {
+            // Add in number of expeditions (expedition_count_peak)
+            d.expedition_count_peak = tempDataExpeditionCount.filter(data => (data["peak_name"] == d.peak_name))[0]["expedition_count_peak"];
+            // Add in death_count_peak key-value pair 
+            d.death_count_peak = 0;
+            if (tempDataDeathCount.filter(data => (data["peak_name"] == d.peak_name))[0] != undefined) {
+                d.death_count_peak = (tempDataDeathCount.filter(data => (data["peak_name"] == d.peak_name))[0])["expedition_death_peak"] || 0;
+            }
+            // compute the death rate (Death count for that Peak / Expedition Count for that Peak) * 100
+            // Round to two decimal places 
+            d.death_rate = 0;
+            if (d.expedition_count_peak > 0) {
+                d.death_rate = parseFloat(((d.death_count_peak / d.expedition_count_peak) * 100).toFixed(2));
+            }
+            // Add in alive_count_peak 
+            d.alive_count_peak = d.expedition_count_peak - d.death_count_peak;
+            // Compute alive rate 
+            d.alive_rate = 0;
+            if (d.expedition_count_peak > 0) {
+                d.alive_rate = parseFloat(((d.alive_count_peak / d.expedition_count_peak) * 100).toFixed(2));
+            }
+        });
 
-        // Sort in descending order by death rate and obtain the first 10 peaks to get the highest death rates and 
-        // then store in display array 
-
-        // Sort in increasing order by death rate and obtain the first 10 peaks to get the lowest death rates and 
-        // then store in display array 
+        // Filter out data more so it only contain unique peak_name 
+        vis.displayData = Array.from(new Map(vis.displayData.map(item => [item.peak_name, item])).values());
+        
+        // Sort in descending order by death count and then store in display array 
+        vis.displayData.sort((peak1, peak2) => peak2.death_count_peak - peak1.death_count_peak);
 
     }
-
     updateVis() {
-       // Visualization is a circular barplot
-       // Uses vis.displayMountainPeakDeathRateInfo for data 
-       // Length of the bars = highpoint_metres (Highest height reached by climbers)
-       // Bars are grouped by highest and lowest rates of death 
+        // Visualization is a circular barplot
+        // Length of the bars on the outside = death_count_peak (Would be in red)
+        // Length of the bars on the inside = alive_count_peak number of expeditions where members survived  
+        
+        // Referenced: https://d3-graph-gallery.com/graph/circular_barplot_double.html
 
-       // Referenced: https://stackoverflow.com/questions/61000740/create-a-radial-circular-grouped-bar-chart-with-d3-js
+        // Define x scale's domain 
+        vis.x.domain(vis.displayData.map(d => d.peak_name)); // The domain is the name of the peaks
+
+        // Define y scale's domain (NEED TO CHECK IF I NEED TO DEFINE THE DOMAIN BEFORE OR WHILE CREATING THE BINS)
+        // The domain is 0 to the max of death_count_peak
+        vis.yOuter.domain([0, d3.max(vis.displayData, d=> d.death_count_peak)]);
+        // The domain is 0 to the max of alive_count_peak
+        vis.yInner.domain([0, d3.max(vis.displayData, d=> d.alive_count_peak)]);
+
+        // Draw the rectangles but as paths
+        // 1. Select 
+
+
+
+
 
        // Update tooltip
-
+       // Info it contains: 
+       // - Peak Name 
+       // - Highest height reached by member 
+       // - Death percentage + Death ratio
+       // - Alive percentage + Alive ratio 
     }
 }
