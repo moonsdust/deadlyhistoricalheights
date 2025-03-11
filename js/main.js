@@ -3,8 +3,7 @@
 * * * * * * * * * * * * * */
 
 // init global variables, switches, helper functions
-let seasonChart;
-
+let deathRateChart;
 
 
 // load data using promises
@@ -27,6 +26,5 @@ function initMainPage(allDataArray) {
     expeditionsData = allDataArray[0];
     membersData = allDataArray[1];
     peaksData = allDataArray[2];
-    seasonChart = new SeasonChart("main-viz-3", membersData);
     deathRateChart = new DeathRateChart("main-viz-2", membersData);
 }
