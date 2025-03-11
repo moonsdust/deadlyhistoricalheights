@@ -217,7 +217,6 @@ class DeathRateChart {
                 // Apply the flip rotation to the angle
                 let finalAngle = angle + flipRotation;
                 let radius = vis.yOuter(d.death_count_peak) + 20;
-                // Correct transformation: first move outward, then rotate
                 return `translate(${Math.cos(angle * Math.PI / 180) * radius}, ${Math.sin(angle * Math.PI / 180) * radius}) rotate(${finalAngle})`;
             })
             .text(d => d.peak_name)
@@ -227,11 +226,43 @@ class DeathRateChart {
 		// Remove extra labels that don't have data attached to them
 		labelsForBars.exit().remove();
 
+        // Create a legend
+        vis.legend = vis.svg.append("g")
+                .attr("class", "legend")
+                .selectAll("legend rect");
 
+        // Create rectangles in legend 
+        let rectangles = vis.legend
+            .data([{death: true}, {death: false}]);
 
+        // Create new rectangles for the data elements without a rectangle 
+		rectangles.enter().append("rect")
+            // 3. Enter and update 
+            .merge(rectangles)
+            .transition()
+            // 4. Position and Style
+            .attr("class", "bar") // Set class to be bar so they inherit the styles that's already set
+            .attr("x", vis.width / 4) 
+            .attr("y", (d, i) => (i * 100) + 300)
+            .attr("height", 50) // Makes it so that all bars are even in width across chart 
+            .attr("width", 50)
+            .style("fill", d => {
+                if (!d.death) {
+                    return "#5184b2"; // Return blue 
+                }
+                return "#D7263D"; // Return red 
+            });
 
+        // 4. Remove any extra rectangles that don't have data attached to them
+        rectangles.exit().remove();
 
-
+        // .text(d => {
+        //     console.log(d);
+        //     if (d.death) {
+        //         return "Died";
+        //     }
+        //     return "Survived"
+        // });
        // Update tooltip
        // Reference: https://jsdatav.is/chap07.html#creating-a-unique-visualization
        // Info it contains: 
