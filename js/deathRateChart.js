@@ -47,6 +47,13 @@ class DeathRateChart {
         vis.yInner= d3.scaleRadial()
             .range([vis.innerRadius, 5]);
 
+        // Initalize legend 
+        vis.legend = vis.svg.append("g")
+            .attr("class", "legend-circular-barplot");
+
+        // Intialize legend text 
+		vis.legendText = vis.legend.selectAll(".legend-circular-barplot text");
+
         // Initalize tooltip
         
 
@@ -214,25 +221,19 @@ class DeathRateChart {
                 let angle = (vis.x(d.peak_name) + vis.x.bandwidth() / 2) * 180 / Math.PI - 90;
                 // Figure out if the text should be rotated upside down
                 let flipRotation = ((vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI) ? 180 : 0;
-                // Apply the flip rotation to the angle
                 let finalAngle = angle + flipRotation;
                 let radius = vis.yOuter(d.death_count_peak) + 20;
                 return `translate(${Math.cos(angle * Math.PI / 180) * radius}, ${Math.sin(angle * Math.PI / 180) * radius}) rotate(${finalAngle})`;
             })
-            .text(d => d.peak_name)
-            .style("font-size", "11px")
-            .attr("alignment-baseline", "middle");
+            .style("font-size", "16px")
+            .text(d => d.peak_name);
 
 		// Remove extra labels that don't have data attached to them
 		labelsForBars.exit().remove();
 
-        // Create a legend
-        vis.legend = vis.svg.append("g")
-                .attr("class", "legend")
-                .selectAll("legend rect");
-
+        // LEGEND 
         // Create rectangles in legend 
-        let rectangles = vis.legend
+        let rectangles = vis.legend.selectAll(".legend-circular-barplot rect")
             .data([{death: true}, {death: false}]);
 
         // Create new rectangles for the data elements without a rectangle 
@@ -242,8 +243,8 @@ class DeathRateChart {
             .transition()
             // 4. Position and Style
             .attr("class", "bar") // Set class to be bar so they inherit the styles that's already set
-            .attr("x", vis.width / 4) 
-            .attr("y", (d, i) => (i * 100) + 300)
+            .attr("x", vis.width / 6) 
+            .attr("y", (d, i) => (i * 50) + 290)
             .attr("height", 50) // Makes it so that all bars are even in width across chart 
             .attr("width", 50)
             .style("fill", d => {
@@ -256,13 +257,23 @@ class DeathRateChart {
         // 4. Remove any extra rectangles that don't have data attached to them
         rectangles.exit().remove();
 
-        // .text(d => {
-        //     console.log(d);
-        //     if (d.death) {
-        //         return "Died";
-        //     }
-        //     return "Survived"
-        // });
+        let labelLegend = vis.legendText.data([{death: true}, {death: false}]);
+
+        // Add in text for legend 
+        labelLegend.enter().append("text")
+            .attr("class", "legend-text-circular-barplot")
+            .merge(labelLegend)
+            .transition()
+            .duration(500)
+            .attr("x", vis.width / 4) 
+            .attr("y", (d, i) => (i * 50) + 320)
+            .style("font-size", "12px")
+            .text(d => {
+                if (d.death) {
+                    return "Climbers who have died";
+                }
+                return "Climbers who have survived"
+            });
        // Update tooltip
        // Reference: https://jsdatav.is/chap07.html#creating-a-unique-visualization
        // Info it contains: 
