@@ -1,17 +1,13 @@
-/*******************************************
- *               deathRateChart.js        *
- *******************************************/
-
 class DeathRateChart {
-    /**
-     * @param {string} parentId - The ID of the parent DOM element (no "#" prefix).
-     * @param {Array} membersData - Array of objects from members.csv
-     *                              Each object should have at least:
-     *                              { died: "TRUE" or "FALSE", ... }
-     * @param {Array} displayData - Array containing mountain peaks with the highest 
-     *                              and lowest rates of deaths and their own arrays 
-     */
     constructor(parentId, membersData) {
+        /**
+         * @param {string} parentId - The ID of the parent DOM element (no "#" prefix).
+         * @param {Array} membersData - Array of objects from members.csv
+         *                              Each object should have at least:
+         *                              { died: "TRUE" or "FALSE", ... }
+         * @param {Array} displayData - Array containing mountain peaks with the highest 
+         *                              and lowest rates of deaths and their own arrays 
+         */
         this.parentElement = document.getElementById(parentId);
         this.membersData = membersData;
         this.displayData = membersData;
@@ -59,10 +55,10 @@ class DeathRateChart {
         vis.updateVis();
     }
 
-    /**
-     * wrangleData() prepares the data to be used by the visualization
-     */
     wrangleData() {
+        /**
+         * wrangleData() prepares the data to be used by the visualization
+         */
         let vis = this;
 
         // Filter out rows where there is NaN from highpoint_metres (Highest height reached by climbers), peak_name, and died 
@@ -136,7 +132,7 @@ class DeathRateChart {
         // Define x scale's domain 
         vis.x.domain(vis.displayData.map(d => d.peak_name)); // The domain is the name of the peaks
 
-        // Define y scale's domain (NEED TO CHECK IF I NEED TO DEFINE THE DOMAIN BEFORE OR WHILE CREATING THE BINS)
+        // Define y scale's domain
         // The domain is 0 to the max of death_count_peak
         vis.yOuter.domain([0, d3.max(vis.displayData, d=> d.death_count_peak)]);
         // The domain is 0 to the max of alive_count_peak
@@ -149,12 +145,12 @@ class DeathRateChart {
             .outerRadius(d => vis.yOuter(d.death_count_peak))
             .startAngle(d => vis.x(d.peak_name))
             .endAngle(d => vis.x(d.peak_name) + vis.x.bandwidth())
-            .padAngle(0.01)
-            .padRadius(vis.innerRadius);
+            .padRadius(vis.innerRadius)
+            .padAngle(0.01);
 
         // 1. Pass in data 
         // Select all paths in the circular barplot
-        vis.outsideBars = vis.svg.selectAll("path")
+        vis.outsideBars = vis.svg.selectAll("circular-barplot-outer path")
             .data(vis.displayData)
             .attr("class", "circular-barplot-outer");
             
@@ -163,16 +159,43 @@ class DeathRateChart {
             // 3. Enter and update 
             .merge(vis.outsideBars)
             // Position and style 
-            .attr("fill", "#69b3a2")
+            .attr("fill", "#ef8a62")
             .attr("class", "outside-bars")
             .attr("d", vis.arcOuter);
 
       	// 4. Remove any extra paths that don't have data attached to them
         vis.outsideBars.exit().remove();
 
+        // Draw the bars - Inner 
+        // Arc path generator 
+        vis.arcInner = d3.arc()
+            .innerRadius(d => vis.yInner(0))
+            .outerRadius(d => vis.yInner(d.alive_count_peak))
+            .startAngle(d => vis.x(d.peak_name))
+            .endAngle(d => vis.x(d.peak_name) + vis.x.bandwidth())
+            .padRadius(vis.innerRadius)
+            .padAngle(0.01);
+
+        // 1. Pass in data 
+        // Select all paths in the circular barplot
+        vis.insideBars = vis.svg.selectAll("circular-barplot-inner path")
+            .data(vis.displayData)
+            .attr("class", "circular-barplot-inner");
+            
+        // 2. Create new paths for the data 
+        vis.insideBars.enter().append("path")
+            // 3. Enter and update 
+            .merge(vis.insideBars)
+            // Position and style 
+            .attr("fill", "#91bfdb")
+            .attr("class", "outside-bars")
+            .attr("d", vis.arcInner);
+
+      	// 4. Remove any extra paths that don't have data attached to them
+        vis.insideBars.exit().remove();
 
 
-        
+
 
 
 
