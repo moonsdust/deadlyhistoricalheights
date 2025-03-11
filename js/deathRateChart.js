@@ -21,7 +21,7 @@ class DeathRateChart {
         this.height = 400 - this.margin.top - this.margin.bottom;
 
         this.innerRadius = 90;
-        this.outerRadius = Math.min(vis.width, vis.height) / 2;
+        this.outerRadius = Math.min(this.width, this.height) / 2;
 
         // Initialize the visualization
         this.initVis();
@@ -34,7 +34,7 @@ class DeathRateChart {
             .attr("width", vis.width + vis.margin.left + vis.margin.right)
             .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
             .append("g")
-            .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
+            .attr("transform", `translate(${(vis.width + vis.margin.left) / 2}, ${(vis.height + vis.margin.top)/ 2})`);
 
         // Define x scale 
         vis.x = d3.scaleBand()
@@ -46,10 +46,10 @@ class DeathRateChart {
         // Define y scales
         // Y-scale for outer bar 
         vis.yOuter= d3.scaleRadial()
-            .range([innerRadius, outerRadius]);
+            .range([vis.innerRadius, vis.outerRadius]);
         // Y-scale for inner bar 
         vis.yInner= d3.scaleRadial()
-            .range([innerRadius, 5]);
+            .range([vis.innerRadius, 5]);
 
         // Initalize tooltip
         
@@ -121,8 +121,12 @@ class DeathRateChart {
         // Sort in descending order by death count and then store in display array 
         vis.displayData.sort((peak1, peak2) => peak2.death_count_peak - peak1.death_count_peak);
 
+        // Get only the top 20 peaks 
+        vis.displayData = vis.displayData.slice(0, 20);
+
     }
     updateVis() {
+        let vis = this;
         // Visualization is a circular barplot
         // Length of the bars on the outside = death_count_peak (Would be in red)
         // Length of the bars on the inside = alive_count_peak number of expeditions where members survived  
@@ -138,14 +142,43 @@ class DeathRateChart {
         // The domain is 0 to the max of alive_count_peak
         vis.yInner.domain([0, d3.max(vis.displayData, d=> d.alive_count_peak)]);
 
-        // Draw the rectangles but as paths
-        // 1. Select 
+        // Draw the bars - outer 
+        // Arc path generator 
+        vis.arcOuter = d3.arc()     
+            .innerRadius(vis.innerRadius)
+            .outerRadius(d => vis.yOuter(d.death_count_peak))
+            .startAngle(d => vis.x(d.peak_name))
+            .endAngle(d => vis.x(d.peak_name) + vis.x.bandwidth())
+            .padAngle(0.01)
+            .padRadius(vis.innerRadius);
 
+        // 1. Pass in data 
+        // Select all paths in the circular barplot
+        vis.outsideBars = vis.svg.selectAll("path")
+            .data(vis.displayData)
+            .attr("class", "circular-barplot-outer");
+            
+        // 2. Create new paths for the data 
+        vis.outsideBars.enter().append("path")
+            // 3. Enter and update 
+            .merge(vis.outsideBars)
+            // Position and style 
+            .attr("fill", "#69b3a2")
+            .attr("class", "outside-bars")
+            .attr("d", vis.arcOuter);
+
+      	// 4. Remove any extra paths that don't have data attached to them
+        vis.outsideBars.exit().remove();
+
+
+
+        
 
 
 
 
        // Update tooltip
+       // Reference: https://jsdatav.is/chap07.html#creating-a-unique-visualization
        // Info it contains: 
        // - Peak Name 
        // - Highest height reached by member 
