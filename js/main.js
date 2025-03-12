@@ -5,7 +5,7 @@ ChatGPT was used to assist in the development of this project.
 // init global variables, switches, helper functions
 let seasonChart;
 let stackedAreaChart, stackedAreaChartTimeline;
-
+let deathChart;
 
 
 // load data using promises
@@ -32,6 +32,7 @@ function initMainPage(allDataArray) {
     seasonChart = new SeasonChart("main-viz-3", membersData);
     stackedAreaChart = new StackedAreaChart("insight-viz-2-viz", stackedAreaChartData.layers);
     stackedAreaChartTimeline = new Timeline("insight-viz-2-timeline", stackedAreaChartData.years);
+    deathRateChart = new DeathRateChart("main-viz-2", membersData);
 }
 
 function setupStackedAreaChartData(rawData) {
