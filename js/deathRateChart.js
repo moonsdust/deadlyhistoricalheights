@@ -1,23 +1,25 @@
 class DeathRateChart {
     constructor(parentId, membersData) {
         /**
-         * @param {string} parentId - The ID of the parent DOM element (no "#" prefix).
+         * @param {string} parentId - The ID of the parent DOM element (Doesn't have "#" in it).
          * @param {Array} membersData - Array of objects from members.csv
-         *                              Each object should have at least:
-         *                              { died: "TRUE" or "FALSE", ... }
-         * @param {Array} displayData - Array containing mountain peaks with the highest 
-         *                              and lowest rates of deaths and their own arrays 
          */
-        this.parentElement = document.getElementById(parentId);
+        this.parentElement = parentId;
         this.membersData = membersData;
         this.displayData = membersData;
-
+        
+        // Controls sizing and position
         this.margin = { top: 20, right: 20, bottom: 20, left: 20 };
         this.width = 800 - this.margin.left - this.margin.right;
         this.height = 1000 - this.margin.top - this.margin.bottom;
 
+        // For the arcs/bars/circular barplot specifically
         this.innerRadius = 90;
         this.outerRadius = Math.min(this.width, this.height) / 2;
+
+        // Controls the colors 
+        this.aliveColor = "#2660A4";
+        this.deathColor = "#D7263D";
 
         // Initialize the visualization
         this.initVis();
@@ -26,7 +28,7 @@ class DeathRateChart {
     initVis() {
         let vis = this;
         // Initalize drawing space 
-        vis.svg = d3.select(vis.parentElement).append("svg")
+        vis.svg = d3.select("#" + vis.parentElement).append("svg")
             .attr("width", vis.width + vis.margin.left + vis.margin.right)
             .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
             .append("g")
@@ -43,9 +45,9 @@ class DeathRateChart {
         // Y-scale for outer bar 
         vis.yOuter= d3.scaleRadial()
             .range([vis.innerRadius, vis.outerRadius]);
-        // Y-scale for inner bar 
-        vis.yInner= d3.scaleRadial()
-            .range([vis.innerRadius, 5]);
+        // // Y-scale for inner bar 
+        // vis.yInner= d3.scaleRadial()
+        //     .range([vis.innerRadius, 5]);
 
         // Initalize legend 
         vis.legend = vis.svg.append("g")
@@ -55,7 +57,9 @@ class DeathRateChart {
 		vis.legendText = vis.legend.selectAll(".legend-circular-barplot text");
 
         // Initalize tooltip
-        
+        vis.tooltip = d3.select("body").append('div')
+            .attr('class', "tooltip")
+            .attr('id', 'circular-barplot-tooltip');
 
         // Prepare data and then update visualization
         vis.wrangleData();
@@ -142,8 +146,8 @@ class DeathRateChart {
         // Define y scale's domain
         // The domain is 0 to the max of death_count_peak
         vis.yOuter.domain([0, d3.max(vis.displayData, d=> d.death_count_peak)]);
-        // The domain is 0 to the max of alive_count_peak
-        vis.yInner.domain([0, d3.max(vis.displayData, d=> d.alive_count_peak)]);
+        // // The domain is 0 to the max of alive_count_peak
+        // vis.yInner.domain([0, d3.max(vis.displayData, d=> d.alive_count_peak)]);
 
         // Draw the bars - outer 
         // Arc path generator 
@@ -157,23 +161,65 @@ class DeathRateChart {
 
         // 1. Pass in data 
         // Select all paths in the circular barplot
-        vis.outsideBars = vis.svg.selectAll("circular-barplot-outer path")
-            .data(vis.displayData)
-            .attr("class", "circular-barplot-outer");
-            
+        vis.outsideBars = vis.svg.selectAll(".circular-barplot-outer path")
+            .data(vis.displayData);
+        
         // 2. Create new paths for the data 
         vis.outsideBars.enter().append("path")
-            // 3. Enter and update 
+            // 3. Enter and update
             .merge(vis.outsideBars)
-            .transition()
-            .duration(400)
             // Position and style 
-            .attr("fill", "#D7263D")
-            .attr("class", "outside-bars")
+            .attr("fill", vis.deathColor)
+            .attr("class", "circular-barplot-outer")
             .attr("d", vis.arcOuter);
 
       	// 4. Remove any extra paths that don't have data attached to them
         vis.outsideBars.exit().remove();
+
+        // Update tooltip
+        // Reference: https://jsdatav.is/chap07.html#creating-a-unique-visualization
+        // Info it contains: 
+        // - Peak Name 
+        // - Highest height reached by member 
+        // - Death percentage + Death ratio
+        // Reselect outside bars  
+        vis.outsideBars = vis.svg.selectAll(".circular-barplot-outer");
+
+        // Add event listener to each outside bar
+        vis.outsideBars.on('mousemove', function(event, d){
+            // Changes the stroke and fill of the bar that is hovered over
+            d3.select(this) // This is now referring to the actual country that is hovered over 
+                .attr('stroke-width', '4px')
+                .attr('stroke', 'white')
+                .attr('fill', '#b17485')
+            // Display info when country is hovered over
+            vis.tooltip
+                .style("opacity", 1)
+                .style("left", event.pageX + 20 + "px")
+                .style("top", event.pageY + "px")
+                .html(`
+                    <div style="color: white; border: thin solid grey; border-radius: 5px; background: #1D1D1D; padding: 20px">
+                        <h5>${d.peak_name}</h5>
+                        <p>Death Proportion (Death count / Total expeditions): <strong style = "color: #FF474D;">${d.death_count_peak} / ${d.expedition_count_peak}</strong> (${d.death_rate}%)</p> 
+                        <p>Highest height reached: <strong style = "color: #90D5FF;">${d.highpoint_metres} m</strong></p>              
+                    </div>`);
+
+            })
+            .on('mouseout', function(event, d){
+                // Resets everything
+                d3.select(this)
+                    .attr('stroke-width', '0px')
+                    .attr("fill", d => {
+                        return vis.deathColor;
+                    })
+
+                vis.tooltip
+                    .style("opacity", 0)
+                    .style("left", 0)
+                    .style("top", 0)
+                    .html(``);
+            });
+
 
         // Draw the bars - Inner 
         // Arc path generator 
@@ -185,25 +231,22 @@ class DeathRateChart {
             .padRadius(vis.innerRadius)
             .padAngle(0.01);
 
-        // 1. Pass in data 
-        // Select all paths in the circular barplot
-        vis.insideBars = vis.svg.selectAll("circular-barplot-inner path")
-            .data(vis.displayData)
-            .attr("class", "circular-barplot-inner");
+        // // 1. Pass in data 
+        // // Select all paths in the circular barplot
+        // vis.insideBars = vis.svg.selectAll("circular-barplot-inner path")
+        //     .data(vis.displayData);
             
-        // 2. Create new paths for the data 
-        vis.insideBars.enter().append("path")
-            // 3. Enter and update 
-            .merge(vis.insideBars)
-            .transition()
-            .duration(400)
-            // Position and style 
-            .attr("fill", "#2660A4")
-            .attr("class", "outside-bars")
-            .attr("d", vis.arcInner);
+        // // 2. Create new paths for the data 
+        // vis.insideBars.enter().append("path")
+        //     // 3. Enter and update 
+        //     .merge(vis.insideBars)
+        //     // Position and style 
+        //     .attr("fill", vis.aliveColor)
+        //     .attr("class", "circular-barplot-inner")
+        //     .attr("d", vis.arcInner);
 
-      	// 4. Remove any extra paths that don't have data attached to them
-        vis.insideBars.exit().remove();
+      	// // 4. Remove any extra paths that don't have data attached to them
+        // vis.insideBars.exit().remove();
 
         // Add labels 
         // Code from: https://d3-graph-gallery.com/graph/circular_barplot_double.html
@@ -234,7 +277,7 @@ class DeathRateChart {
         // LEGEND 
         // Create rectangles in legend 
         let rectangles = vis.legend.selectAll(".legend-circular-barplot rect")
-            .data([{death: true}, {death: false}]);
+            .data([{death: true}]);
 
         // Create new rectangles for the data elements without a rectangle 
 		rectangles.enter().append("rect")
@@ -249,15 +292,16 @@ class DeathRateChart {
             .attr("width", 50)
             .style("fill", d => {
                 if (!d.death) {
-                    return "#5184b2"; // Return blue 
+                    // Death is false, return color set for vis.aliveColor
+                    return vis.aliveColor;
                 }
-                return "#D7263D"; // Return red 
+                return vis.deathColor;
             });
 
         // 4. Remove any extra rectangles that don't have data attached to them
         rectangles.exit().remove();
 
-        let labelLegend = vis.legendText.data([{death: true}, {death: false}]);
+        let labelLegend = vis.legendText.data([{death: true}]);
 
         // Add in text for legend 
         labelLegend.enter().append("text")
@@ -270,16 +314,9 @@ class DeathRateChart {
             .style("font-size", "12px")
             .text(d => {
                 if (d.death) {
-                    return "Climbers who have died";
+                    return "Number of climbers who have died";
                 }
-                return "Climbers who have survived"
+                return "Number of climbers who have survived"
             });
-       // Update tooltip
-       // Reference: https://jsdatav.is/chap07.html#creating-a-unique-visualization
-       // Info it contains: 
-       // - Peak Name 
-       // - Highest height reached by member 
-       // - Death percentage + Death ratio
-       // - Alive percentage + Alive ratio 
     }
 }
