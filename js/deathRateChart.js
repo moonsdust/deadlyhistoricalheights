@@ -18,7 +18,6 @@ class DeathRateChart {
         this.outerRadius = Math.min(this.width, this.height) / 2;
 
         // Controls the colors 
-        this.aliveColor = "#2660A4";
         this.deathColor = "#D7263D";
 
         // Initialize the visualization
@@ -45,17 +44,19 @@ class DeathRateChart {
         // Y-scale for outer bar 
         vis.yOuter= d3.scaleRadial()
             .range([vis.innerRadius, vis.outerRadius]);
-        // // Y-scale for inner bar 
-        // vis.yInner= d3.scaleRadial()
-        //     .range([vis.innerRadius, 5]);
 
-        // Initalize legend 
-        vis.legend = vis.svg.append("g")
-            .attr("class", "legend-circular-barplot");
-
-        // Intialize legend text 
-		vis.legendText = vis.legend.selectAll(".legend-circular-barplot text");
-
+        // Intialize title 
+		vis.title = vis.svg.append("text")
+            .attr("class", "vis-title-circular-barplot")
+            .attr("text-anchor", "center")
+            .attr("x", -(vis.width/2.5))
+            .attr("y", vis.height / 3)
+            .style("font-size", 18)
+            .style("font-weight", 600)
+            .style("fill", "black")
+            .style("text-decoration","underline")
+            .text("Top 20 Mountain Peaks in the Himalayas with the Most Number of Deaths");
+        
         // Initalize tooltip
         vis.tooltip = d3.select("body").append('div')
             .attr('class', "tooltip")
@@ -146,9 +147,7 @@ class DeathRateChart {
         // Define y scale's domain
         // The domain is 0 to the max of death_count_peak
         vis.yOuter.domain([0, d3.max(vis.displayData, d=> d.death_count_peak)]);
-        // // The domain is 0 to the max of alive_count_peak
-        // vis.yInner.domain([0, d3.max(vis.displayData, d=> d.alive_count_peak)]);
-
+        
         // Draw the bars - outer 
         // Arc path generator 
         vis.arcOuter = d3.arc()     
@@ -220,34 +219,6 @@ class DeathRateChart {
                     .html(``);
             });
 
-
-        // Draw the bars - Inner 
-        // Arc path generator 
-        vis.arcInner = d3.arc()
-            .innerRadius(d => vis.yInner(0))
-            .outerRadius(d => vis.yInner(d.alive_count_peak))
-            .startAngle(d => vis.x(d.peak_name))
-            .endAngle(d => vis.x(d.peak_name) + vis.x.bandwidth())
-            .padRadius(vis.innerRadius)
-            .padAngle(0.01);
-
-        // // 1. Pass in data 
-        // // Select all paths in the circular barplot
-        // vis.insideBars = vis.svg.selectAll("circular-barplot-inner path")
-        //     .data(vis.displayData);
-            
-        // // 2. Create new paths for the data 
-        // vis.insideBars.enter().append("path")
-        //     // 3. Enter and update 
-        //     .merge(vis.insideBars)
-        //     // Position and style 
-        //     .attr("fill", vis.aliveColor)
-        //     .attr("class", "circular-barplot-inner")
-        //     .attr("d", vis.arcInner);
-
-      	// // 4. Remove any extra paths that don't have data attached to them
-        // vis.insideBars.exit().remove();
-
         // Add labels 
         // Code from: https://d3-graph-gallery.com/graph/circular_barplot_double.html
 		// and labels for each bar
@@ -273,50 +244,5 @@ class DeathRateChart {
 
 		// Remove extra labels that don't have data attached to them
 		labelsForBars.exit().remove();
-
-        // LEGEND 
-        // Create rectangles in legend 
-        let rectangles = vis.legend.selectAll(".legend-circular-barplot rect")
-            .data([{death: true}]);
-
-        // Create new rectangles for the data elements without a rectangle 
-		rectangles.enter().append("rect")
-            // 3. Enter and update 
-            .merge(rectangles)
-            .transition()
-            // 4. Position and Style
-            .attr("class", "bar") // Set class to be bar so they inherit the styles that's already set
-            .attr("x", vis.width / 6) 
-            .attr("y", (d, i) => (i * 50) + 290)
-            .attr("height", 50) // Makes it so that all bars are even in width across chart 
-            .attr("width", 50)
-            .style("fill", d => {
-                if (!d.death) {
-                    // Death is false, return color set for vis.aliveColor
-                    return vis.aliveColor;
-                }
-                return vis.deathColor;
-            });
-
-        // 4. Remove any extra rectangles that don't have data attached to them
-        rectangles.exit().remove();
-
-        let labelLegend = vis.legendText.data([{death: true}]);
-
-        // Add in text for legend 
-        labelLegend.enter().append("text")
-            .attr("class", "legend-text-circular-barplot")
-            .merge(labelLegend)
-            .transition()
-            .duration(500)
-            .attr("x", vis.width / 4) 
-            .attr("y", (d, i) => (i * 50) + 320)
-            .style("font-size", "12px")
-            .text(d => {
-                if (d.death) {
-                    return "Number of climbers who have died";
-                }
-                return "Number of climbers who have survived"
-            });
     }
 }
