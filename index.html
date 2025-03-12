@@ -71,12 +71,23 @@
       </div>
       <!-- Visualization Pair 2 -->
       <div class="viz-section">
-        <div class="viz" id="insight-viz-2">
+        <div class="viz" id="insight-viz-2" style="flex-direction: column;">
+          <div class="viz-title">Leading Causes of Death</div>
+          <div class="viz" id="insight-viz-2-viz"></div>
+          <div class="insight-viz-2-subtitle">Click on a curve to focus on a specific cause of death</div> 
+          <div class="viz" id="insight-viz-2-timeline"></div>
           <!-- Rising insights visualization 2 placeholder -->
+          <div class="insight-viz-2-subtitle">Brush over timeline to change the years of interest</div> 
+          
         </div>
+
         <div class="description">
           <p>
-            Description for rising insights visualization 2.
+            Falling is the leading cause of death for expeditions in the Himalayas. 
+            This tells us that despite the probable profiency of climbers, the treks 
+            of the Himalayas are still quite dangerous and climbers must be cautious 
+            on their trip.
+
           </p>
         </div>
       </div>
@@ -129,7 +140,19 @@
         </div>
         <div class="description">
           <p>
-            Description for main message visualization 3.
+            This shows that many climbers successfully reached the summit during spring and autumn. 
+            Surprisingly, despite a lower success rate, there were more successful climbs in winter than in summer.
+          </p>
+        </div>
+      </div>
+      <!-- Visualization Pair 4 -->
+      <div class="viz-section">
+        <div class="viz" id="main-viz-4">
+          <!-- Main message visualization 4 placeholder -->
+        </div>
+        <div class="description">
+          <p>
+            Description for main message visualization 4.
           </p>
         </div>
       </div>
@@ -157,13 +180,31 @@
         </p>
       </div>
     </section>
+
+    <!-- Credits Section -->
+    <section id="credits" class="section-gap">
+      <div class = "dev-credits">
+        <p>
+          By: <b><a href = "https://github.com/moonsdust" target="_blank">Emily Su</a></b>, <b><a href = "https://github.com/Fard-Faru" target="_blank">Fardin Faruk</a></b>, and <b><a href = "https://github.com/TheTomLi" target="_blank">Wenzhuoyi (Tom) Li</a></b>
+        </p>
+      </div>
+      <div class = "data-source-credits">
+        <p><b>Data Sources:</b></p>
+        <ul>
+          <li>The Himalayan Database: <a href = "https://www.himalayandatabase.com/index.html" target="_blank">Source</a></li>
+          <li>Alex Cookson's Cleaned Datasets of The Himalayan Database (1905 to Spring 2019): <a href = "https://github.com/tacookson/data/tree/master/himalayan-expeditions" target="_blank">Source</a></li>
+        </ul>
+      </div>
+    </section>
   </div>
 
   <!-- jQuery and Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <!-- Custom JS -->
+  <script src="js/stackedAreaChart.js"></script>
   <script src="js/main.js"></script>
   <script src="js/deathRateChart.js"></script>
+  <script src="js/seasonChart.js"></script>
 </body>
 </html>
