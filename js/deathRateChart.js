@@ -230,28 +230,28 @@ class DeathRateChart {
 
         // Add labels 
         // Code from: https://d3-graph-gallery.com/graph/circular_barplot_double.html
-		// and labels for each bar
-		let labelsForBars = vis.svg.selectAll(".bar-label")
-			.data(vis.displayData);
+	// and labels for each bar
+	let labelsForBars = vis.svg.selectAll(".bar-label")
+		.data(vis.displayData);
         
         labelsForBars.enter().append("text")
-            .attr("class", "bar-label")
-            .merge(labelsForBars)
-            .transition()
-            .duration(500)
-            .attr("text-anchor", d => (vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
-            .attr("transform", d => {
-                let angle = (vis.x(d.peak_name) + vis.x.bandwidth() / 2) * 180 / Math.PI - 90;
-                // Figure out if the text should be rotated upside down
-                let flipRotation = ((vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI) ? 180 : 0;
-                let finalAngle = angle + flipRotation;
-                let radius = vis.yOuter(d.death_count_peak) + 20;
-                return `translate(${Math.cos(angle * Math.PI / 180) * radius}, ${Math.sin(angle * Math.PI / 180) * radius}) rotate(${finalAngle})`;
-            })
-            .style("font-size", "16px")
-            .text(d => d.peak_name);
+		.attr("class", "bar-label")
+		.merge(labelsForBars)
+		.transition()
+		.duration(500)
+		.attr("text-anchor", d => (vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
+		.attr("transform", d => {
+                	let angle = (vis.x(d.peak_name) + vis.x.bandwidth() / 2) * 180 / Math.PI - 90;
+                	// Figure out if the text should be rotated upside down
+                	let flipRotation = ((vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI) ? 180 : 0;
+                	let finalAngle = angle + flipRotation;
+                	let radius = vis.yOuter(d.death_count_peak) + 20;
+                	return `translate(${Math.cos(angle * Math.PI / 180) * radius}, ${Math.sin(angle * Math.PI / 180) * radius}) rotate(${finalAngle})`;
+            	})
+            	.style("font-size", "16px")
+            	.text(d => d.peak_name);
 
-		// Remove extra labels that don't have data attached to them
-		labelsForBars.exit().remove();
+	// Remove extra labels that don't have data attached to them
+	labelsForBars.exit().remove();
     }
 }
