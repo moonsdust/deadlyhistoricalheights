@@ -57,6 +57,15 @@ class DeathRateChart {
             .style("text-decoration","underline")
             .text("Top 20 Mountain Peaks in the Himalayas with the Most Number of Deaths");
         
+        vis.subtitle = vis.svg.append("text")
+            .attr("class", "vis-subtitle-circular-barplot")
+            .attr("text-anchor", "center")
+            .attr("x", -(vis.width/4))
+            .attr("y", vis.height / 3 + vis.margin.top + vis.margin.bottom)
+            .style("font-size", 14)
+            .style("fill", "black")
+            .text("Length of arc depicts the death count of each mountain peak.");
+        
         // Initalize tooltip
         vis.tooltip = d3.select("body").append('div')
             .attr('class', "tooltip")
