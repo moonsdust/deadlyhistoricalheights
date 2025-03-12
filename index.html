@@ -71,7 +71,7 @@
       </div>
       <!-- Visualization Pair 2 -->
       <div class="viz-section">
-        <div class="viz" id="insight-viz-2" style="flex-direction: column;">
+        <div class="viz" id="insight-viz-2">
           <div class="viz-title">Leading Causes of Death</div>
           <div class="viz" id="insight-viz-2-viz"></div>
           <div class="insight-viz-2-subtitle">Click on a curve to focus on a specific cause of death</div> 
@@ -145,11 +145,20 @@
       <div class="viz-section">
         <div class="viz" id="main-viz-4">
           <!-- Main message visualization 4 placeholder -->
+          <div class="viz-title">Average Death Rate Over The Years</div>
+           
         </div>
         <div class="description">
-          <p>
-            Description for main message visualization 4.
-          </p>
+            <div>
+              What do you think would be the death rate trend looks like over the years? Could it be soaring high up or dropping down low?<br><br>
+              In the plot on the left, the line represents the 25-year moving average of death rate on the Himalayas.<br><br>            
+              Estimate and draw the rest of the trend! When you are done, click "Reveal True Trend".</p>
+            <button id="reveal-btn" class="btn btn-success">Reveal True Trend</button>
+          </div>
+          <div class="reveal-text">
+            Well, how did you do? <br><br>
+            Did you expect that the real trend falls and stabilizes to a near 0 death rate?
+          </div>
         </div>
       </div>
     </section>
@@ -199,7 +208,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <!-- Custom JS -->
   <script src="js/stackedAreaChart.js"></script>
-  <script src="js/main.js"></script>
   <script src="js/seasonChart.js"></script>
+  <script src="js/guessLineChart.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
