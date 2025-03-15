@@ -18,7 +18,7 @@ class DeathRateChart {
         this.outerRadius = Math.min(this.width, this.height) / 2;
 
         // Controls the colors 
-        this.deathColor = "#D7263D";
+        this.colors = ["#a6bddb", "#74a9cf", "#3690c0","#0570b0","#045a8d","#023858"];
 
         // Initialize the visualization
         this.initVis();
@@ -53,23 +53,51 @@ class DeathRateChart {
             .attr("y", vis.height / 3)
             .style("font-size", 18)
             .style("font-weight", 600)
-            .style("fill", "black")
-            .style("text-decoration","underline")
+            .style("fill", "#525252")
+            // .style("text-decoration","underline")
             .text("Top 20 Mountain Peaks in the Himalayas with the Most Number of Deaths");
         
+        // Intialize subtitle
         vis.subtitle = vis.svg.append("text")
             .attr("class", "vis-subtitle-circular-barplot")
             .attr("text-anchor", "center")
             .attr("x", -(vis.width/4))
             .attr("y", vis.height / 3 + vis.margin.top + vis.margin.bottom)
             .style("font-size", 14)
-            .style("fill", "black")
+            .style("fill", "#666666")
             .text("Length of arc depicts the death count of each mountain peak.");
         
         // Initalize tooltip
         vis.tooltip = d3.select("body").append('div')
             .attr('class', "tooltip")
             .attr('id', 'circular-barplot-tooltip');
+
+        // Define scale for colour
+        vis.color = d3.scaleQuantize()
+            .range(vis.colors);
+
+        // Define legend scale
+        vis.legendScale = d3.scaleSequential()
+            .range([0, 150]);
+
+        // Initate legend
+        vis.legend = vis.svg.append("g")
+            .attr('class', 'legend')
+            .attr('transform', `translate(-${vis.width/2.3}, -${vis.height/2.6})`);
+                
+        // Create legend axis group 
+        vis.legend.append("g")
+            .attr("class", "legend-axis axis");  
+
+        // Intialize legend title
+        vis.legendTitle = vis.svg.append("text")
+            .attr("class", "vis-legend-title-circular-barplot")
+            .attr("text-anchor", "center")
+            .attr("x", -(vis.width/2.3))
+            .attr("y", -(vis.height/2.3))
+            .style("font-size", 14)
+            .style("fill", "#666666")
+            .text("Number of deaths");
 
         // Prepare data and then update visualization
         vis.wrangleData();
@@ -141,13 +169,14 @@ class DeathRateChart {
         // Get only the top 20 peaks 
         vis.displayData = vis.displayData.slice(0, 20);
 
+        // Set up object to store mountain peak info and color  
+        vis.mountainInfoColor = {};
+
     }
     updateVis() {
         let vis = this;
         // Visualization is a circular barplot
-        // Length of the bars on the outside = death_count_peak (Would be in red)
-        // Length of the bars on the inside = alive_count_peak number of expeditions where members survived  
-        
+        // Length of the bars on the outside = death_count_peak (Would be in red)        
         // Referenced: https://d3-graph-gallery.com/graph/circular_barplot_double.html
 
         // Define x scale's domain 
@@ -156,6 +185,10 @@ class DeathRateChart {
         // Define y scale's domain
         // The domain is 0 to the max of death_count_peak
         vis.yOuter.domain([0, d3.max(vis.displayData, d=> d.death_count_peak)]);
+
+        // Update domain for colour
+        vis.color.domain([(d3.min(vis.displayData, d => d.death_count_peak)), 
+        d3.max(vis.displayData, d => d.death_count_peak)]);
         
         // Draw the bars - outer 
         // Arc path generator 
@@ -177,7 +210,18 @@ class DeathRateChart {
             // 3. Enter and update
             .merge(vis.outsideBars)
             // Position and style 
-            .attr("fill", vis.deathColor)
+            .attr("fill", d => {
+                for (let i = 0; i < vis.displayData.length; i++) {
+                    if (vis.displayData[i].peak_name == d.peak_name) {
+                        // Assign colour to peak
+                        vis.displayData[i].color = vis.color(vis.displayData[i].death_count_peak);
+                        // Store mountain info and colour
+                        vis.mountainInfoColor[vis.displayData[i].peak_name] = vis.displayData[i]; 
+                        return vis.displayData[i].color;
+                    }
+                }
+            }
+            )
             .attr("class", "circular-barplot-outer")
             .attr("d", vis.arcOuter);
 
@@ -185,7 +229,6 @@ class DeathRateChart {
         vis.outsideBars.exit().remove();
 
         // Update tooltip
-        // Reference: https://jsdatav.is/chap07.html#creating-a-unique-visualization
         // Info it contains: 
         // - Peak Name 
         // - Highest height reached by member 
@@ -218,7 +261,7 @@ class DeathRateChart {
                 d3.select(this)
                     .attr('stroke-width', '0px')
                     .attr("fill", d => {
-                        return vis.deathColor;
+                        return vis.mountainInfoColor[d.peak_name].color;
                     })
 
                 vis.tooltip
@@ -230,28 +273,62 @@ class DeathRateChart {
 
         // Add labels 
         // Code from: https://d3-graph-gallery.com/graph/circular_barplot_double.html
-	// and labels for each bar
-	let labelsForBars = vis.svg.selectAll(".bar-label")
-		.data(vis.displayData);
-        
+        // and labels for each bar
+        let labelsForBars = vis.svg.selectAll(".bar-label")
+            .data(vis.displayData);
+            
         labelsForBars.enter().append("text")
-		.attr("class", "bar-label")
-		.merge(labelsForBars)
-		.transition()
-		.duration(500)
-		.attr("text-anchor", d => (vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
-		.attr("transform", d => {
-                	let angle = (vis.x(d.peak_name) + vis.x.bandwidth() / 2) * 180 / Math.PI - 90;
-                	// Figure out if the text should be rotated upside down
-                	let flipRotation = ((vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI) ? 180 : 0;
-                	let finalAngle = angle + flipRotation;
-                	let radius = vis.yOuter(d.death_count_peak) + 20;
-                	return `translate(${Math.cos(angle * Math.PI / 180) * radius}, ${Math.sin(angle * Math.PI / 180) * radius}) rotate(${finalAngle})`;
-            	})
-            	.style("font-size", "16px")
-            	.text(d => d.peak_name);
+            .attr("class", "bar-label")
+            .merge(labelsForBars)
+            .transition()
+            .duration(500)
+            .attr("fill", "#525252")
+            .attr("text-anchor", d => (vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start")
+            .attr("transform", d => {
+                        let angle = (vis.x(d.peak_name) + vis.x.bandwidth() / 2) * 180 / Math.PI - 90;
+                        // Figure out if the text should be rotated upside down
+                        let flipRotation = ((vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI) ? 180 : 0;
+                        let finalAngle = angle + flipRotation;
+                        let radius = vis.yOuter(d.death_count_peak) + 20;
+                        return `translate(${Math.cos(angle * Math.PI / 180) * radius}, ${Math.sin(angle * Math.PI / 180) * radius}) rotate(${finalAngle})`;
+                    })
+                    .style("font-size", "16px")
+                    .text(d => d.peak_name);
 
-	// Remove extra labels that don't have data attached to them
-	labelsForBars.exit().remove();
+        // Remove extra labels that don't have data attached to them
+        labelsForBars.exit().remove();
+
+        // Define domain of legend 
+        vis.legendScale.domain([(d3.min(vis.displayData, d => d.death_count_peak)), 
+            d3.max(vis.displayData, d => d.death_count_peak)]);
+
+        // Create legend axis 
+        vis.legendAxis = d3.axisBottom()
+            .scale(vis.legendScale)
+            .tickValues([d3.min(vis.displayData, d => d.death_count_peak), d3.max(vis.displayData, d => d.death_count_peak)]);
+    
+        // Call the legend axis inside the legend axis group
+        // Update the legend 
+        vis.legend.select(".legend-axis").call(vis.legendAxis);
+        
+        // Creating a legend 
+        let rectLegend = vis.legend
+            .selectAll("rect")
+            .data(vis.colors);
+
+        // Create new rectangles if needed 
+        rectLegend.enter().append("rect")
+                // Enter and update
+            .merge(rectLegend)
+            // Position and Style
+            .attr("class", "bar") 
+            .attr("x", (d, i) => 0 + (i*25))
+            .attr("y", -(vis.margin.top + 10))
+            .attr("height", 30) 
+            .attr("width", 25)
+            .style("fill", (d, i) => {return vis.colors[i];});
+
+        // Remove any extra rectangles that don't have data attached to them
+        rectLegend.exit().remove();
     }
 }
