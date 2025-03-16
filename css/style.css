@@ -2,7 +2,8 @@
 
 /* General Styles */
 body {
-  background-color: #f8f9fa;
+  background-color: #eeeeee;
+  color: #676767;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -10,10 +11,6 @@ body {
 }
 
 /* Vertical spacing for sections */
-#title-page {
-  background-color: #eee;
-}
-
 .section-gap {
   margin-top: 40px;
   margin-bottom: 40px;
@@ -164,8 +161,9 @@ h1, h2, h3 {
 /* Title page specific*/
 .title-page-title-section {
   text-align: center;
-  padding: 17% 10% 0 10%;
+  margin: 10% 10% 10% 10%;
   color: #676767;
+  /* color: #eeeeee; */
 }
 
 .title-page-title {
@@ -176,13 +174,17 @@ h1, h2, h3 {
 
 /* Landscape */
 .landscape {
-  background: #eee;
+  /* background: #1f1f1f; */
+  background: #eeeeee;
   overflow: hidden;
   position: relative;
-  padding-top: 50vh;
 }
 
-.landscape__layer {
+.mountains_group {
+  padding-top: 40vh;
+}
+
+.landscape_layer {
   left: 0;
   top: 0;
   width: 100%;
@@ -190,7 +192,7 @@ h1, h2, h3 {
   position: absolute;
 }
 
-.landscape__image {
+.landscape_image {
   bottom: 0;
   display: flex;
   flex-direction: column;
@@ -198,8 +200,12 @@ h1, h2, h3 {
   width: 100%;
 }
 
-.landscape__image svg {
+.landscape_image svg {
   display: block;
   height: auto;
   width: 100%;
+}
+
+.foreground_valley {
+  z-index: 100;
 }
