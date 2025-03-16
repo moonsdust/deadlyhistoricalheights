@@ -17,7 +17,7 @@ class DotGraph {
         this.height = 400 - this.margin.top - this.margin.bottom;
 
         // Controls the colors 
-        this.colors = ["#c994c7","#b2182b","#d6604d","#f4a582", "#fddbc7", "#d1e5f0","#92c5de","#4393c3","#2166ac"];
+        this.colors = ["#2166ac", "#c994c7","#d6604d","#f4a582", "#fddbc7", "#d1e5f0","#92c5de","#4393c3","#b2182b"];
 
         // Initialize the visualization
         this.initVis();
