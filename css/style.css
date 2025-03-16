@@ -54,6 +54,15 @@ body {
   background-color: #f1f3f5;
 }
 
+/* Dot graph texts */
+.text-for-sex, .text-for-sex-2 {
+  display: block;
+}
+
+.text-for-age-group, .text-for-age-group-2 {
+  display: none;
+}
+
 /* Solutions Section Items */
 .solution-item {
   border: 1px solid #ced4da;
