@@ -34,7 +34,24 @@ class SeasonChart {
 
         // Prepare data and draw
         this.prepareData();
-        this.updateVis();
+        // Set up IntersectionObserver to trigger updateVis when the element comes into view
+        const observerOptions = {
+            threshold: 0.5 // Adjust threshold as needed (0.5 means 50% visible)
+        };
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Start the animation when the element is visible
+                    this.updateVis();
+                    // Unobserve after triggering to prevent re-running the animation
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe the parent container of the chart
+        observer.observe(this.parentElement);
     }
 
     /**

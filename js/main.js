@@ -37,6 +37,28 @@ function initMainPage(allDataArray) {
 
     // console.log(guessLineChartData);
 
+    cliffChart = new CliffChart(membersData);
+    // 2) Use IntersectionObserver to watch the container
+    const container = document.getElementById("insight-viz-1");
+
+    const observerOptions = {
+    threshold: 0.3 // means 30% of container must be visible to trigger
+    };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+        // Start the animation
+        cliffChart.startFlow();
+        
+        // Unobserve so it doesn't trigger again
+        obs.unobserve(entry.target);
+        }
+    });
+    }, observerOptions);
+
+    observer.observe(container);
+
 
     stackedAreaChart = new StackedAreaChart("insight-viz-2-viz", stackedAreaChartData.layers);
     stackedAreaChartTimeline = new Timeline("insight-viz-2-timeline", stackedAreaChartData.years);
