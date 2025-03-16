@@ -93,13 +93,26 @@
       </div>
       <!-- Visualization Pair 3 -->
       <div class="viz-section">
+        <div class = "description-title">
+          <h2>Completed expeditions</h2>
+          <p>What are the age groups and genders of individuals who have completed Himalayan expeditions?</p>
+        </div>
         <div class="viz" id="insight-viz-3">
           <!-- Rising insights visualization 3 placeholder -->
-        </div>
+        </div> 
         <div class="description">
-          <p>
-            Description for rising insights visualization 3.
-          </p>
+          <!--Category Select-->   
+          <select id='categorySelectorDotGraph' class="custom-select align-self-center" style="width: 50%" onchange="categoryChangeDotGraph()">
+            <option value="sex" selected>Sex/Gender</option>
+            <option value="age_group">Age Group</option>
+          </select>  
+          <div class = "text-for-sex">
+            <p>Out of all the total successful expeditions, <strong>91.99%</strong> of the climbers were male while <strong>8.01%</strong> of the climbers were female.</p>
+            <p>However, the success rate for both groups was almost equal with female climbers having a success rate of <strong>32.91%</strong> while for male climbers it was <strong>39.04%</strong>.</p>
+          </div>
+          <div class = "text-for-age-group">
+            <p>The age group that makes up most of the successful expeditions was <strong>30 to 39 years old</strong>. However, the group with the highest success rate was <strong>13 to 19 years old</strong>.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -109,13 +122,21 @@
       <h2 class="text-center">Main Message</h2>
       <!-- Visualization Pair 1 -->
       <div class="viz-section">
+        <div class = "description-title">
+          <h2>Supplemental Oxygen Use</h2>
+          <p>What percentage of climbers, across different age groups and genders, use supplemental oxygen during their expeditions?</p>
+        </div>
         <div class="viz" id="main-viz-1">
           <!-- Main message visualization 1 placeholder -->
-        </div>
-        <div class="description">
-          <p>
-            Description for main message visualization 1.
-          </p>
+        </div> 
+        <div class="description"> 
+          <div class = "text-for-sex-2">
+            <p>Out of all expeditions, <strong>91.57%</strong> of oxygen used was by male climbers while only <strong>8.43%</strong> of were used by females climbers.</p>
+            <p>However, the oxygen use rate for both groups was close to equal with female climbers having a rate of <strong>21.91%</strong> while for male climbers it was <strong>24.59%</strong>.</p>
+          </div>
+          <div class = "text-for-age-group-2">
+            <p>The age group that used the most oxygen was <strong>30 to 39 years old</strong>. However, the age group that had the highest rate of oxygen use was <strong>13 to 19 years old</strong>.</p>
+          </div>
         </div>
       </div>
       <!-- Visualization Pair 2 -->
@@ -209,6 +230,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <!-- Custom JS -->
   <script src="js/stackedAreaChart.js"></script>
+  <script src="js/dotGraph.js"></script>
   <script src="js/deathRateChart.js"></script>
   <script src="js/seasonChart.js"></script>
   <script src="js/guessLineChart.js"></script>

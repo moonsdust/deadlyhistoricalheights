@@ -7,8 +7,10 @@ let seasonChart;
 let stackedAreaChart, stackedAreaChartTimeline;
 let deathChart;
 let guessLineChart;
+let dotGraphCompletion;
+let dotGraphOxygenUse;
 
-
+let selectedCategoryForDotGraph = document.getElementById('categorySelectorDotGraph').value; // This would indicate what the current value for the select is (age or gender)
 
 // load data using promises
 let promises = [
@@ -31,16 +33,18 @@ function initMainPage(allDataArray) {
     let membersData = allDataArray[1];
     let peaksData = allDataArray[2];
     let stackedAreaChartData = setupStackedAreaChartData(membersData);
-    let guessLineChartData =  setupGuessLineChartData(membersData)
+    let guessLineChartData =  setupGuessLineChartData(membersData);
 
     // console.log(guessLineChartData);
 
 
-    seasonChart = new SeasonChart("main-viz-3", membersData);
     stackedAreaChart = new StackedAreaChart("insight-viz-2-viz", stackedAreaChartData.layers);
     stackedAreaChartTimeline = new Timeline("insight-viz-2-timeline", stackedAreaChartData.years);
     deathRateChart = new DeathRateChart("main-viz-2", membersData);
+    seasonChart = new SeasonChart("main-viz-3", membersData);
     guessLineChart = new GuessLineChart("main-viz-4", guessLineChartData);
+    dotGraphCompletion = new DotGraph("insight-viz-3", membersData, "success");
+    dotGraphOxygenUse = new DotGraph("main-viz-1", membersData, "oxygen_used");
 }
 
 function setupStackedAreaChartData(data) {
@@ -140,3 +144,24 @@ function stackedAreaChartBrushed() {
 	stackedAreaChart.wrangleData();
 
 }
+
+function categoryChangeDotGraph(){
+    // Updates the dot graphs based on the selected value 
+    selectedCategoryForDotGraph = document.getElementById('categorySelectorDotGraph').value;
+
+    if (selectedCategoryForDotGraph === "sex") {
+        document.querySelector(".text-for-sex").style.display = 'block';
+        document.querySelector(".text-for-sex-2").style.display = 'block';
+        document.querySelector(".text-for-age-group").style.display = 'none';
+        document.querySelector(".text-for-age-group-2").style.display = 'none';
+    } 
+    else {
+        document.querySelector(".text-for-sex").style.display = 'none';
+        document.querySelector(".text-for-sex-2").style.display = 'none';
+        document.querySelector(".text-for-age-group").style.display = 'block';
+        document.querySelector(".text-for-age-group-2").style.display = 'block';
+    }
+
+    dotGraphCompletion.wrangleData(); 
+    dotGraphOxygenUse.wrangleData();
+ }
