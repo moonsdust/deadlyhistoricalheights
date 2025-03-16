@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 /* General Styles */
 body {
-  background-color: #f8f9fa;
+  background-color: #eeeeee;
+  color: #676767;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 /* Vertical spacing for sections */
@@ -54,6 +58,15 @@ body {
   background-color: #f1f3f5;
 }
 
+/* Dot graph texts */
+.text-for-sex, .text-for-sex-2 {
+  display: block;
+}
+
+.text-for-age-group, .text-for-age-group-2 {
+  display: none;
+}
+
 /* Solutions Section Items */
 .solution-item {
   border: 1px solid #ced4da;
@@ -86,4 +99,113 @@ h1, h2, h3 {
   opacity: 0;
   font-size: 16px;
   margin-top: 10px;
+}
+/* Nav Bar */
+.side-nav {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+}
+
+.side-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.side-nav li {
+  margin: 10px 0;
+}
+
+.nav-dot {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #b5b5b5;
+  position: relative;
+}
+
+.nav-dot::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: #b5b5b5;
+  border-radius: 50%;
+  display: block;
+  transition: background 0.3s ease-in-out;
+}
+
+.nav-dot span {
+  display: none;
+  position: absolute;
+  left: 20px;
+  font-size: 14px;
+  color: #b5b5b5;
+  white-space: nowrap;
+}
+
+/* Show text when hovering */
+.nav-dot:hover span {
+  display: inline;
+}
+
+/* Highlight active section */
+.nav-dot.active::before {
+  background: #5b5b5b;
+  width: 14px;
+  height: 14px;
+}
+
+/* Title page specific*/
+.title-page-title-section {
+  text-align: center;
+  margin: 10% 10% 10% 10%;
+  color: #676767;
+  /* color: #eeeeee; */
+}
+
+.title-page-title {
+  font-family: 'Cabin', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 800;
+  font-size: 5em;
+}
+
+/* Landscape */
+.landscape {
+  /* background: #1f1f1f; */
+  background: #eeeeee;
+  overflow: hidden;
+  position: relative;
+}
+
+.mountains_group {
+  padding-top: 40vh;
+}
+
+.landscape_layer {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.landscape_image {
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+}
+
+.landscape_image svg {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.foreground_valley {
+  z-index: 100;
 }

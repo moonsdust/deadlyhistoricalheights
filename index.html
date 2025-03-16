@@ -10,26 +10,68 @@
   <link rel="stylesheet" href="css/style.css" />
   <!-- D3 Library -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!--AOS-->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <!-- Title Page Section -->
-    <section id="title-page" class="section-gap">
-      <h1 class="text-center">
-        The Deadly Historical Heights: A Deep Dive into Climber Mortality in the Himalayas
-      </h1>
-      <div class="viz-section">
-        <div class="viz" id="background-viz">
-          <!-- Background visualization placeholder -->
+
+  <nav class="side-nav">
+    <ul>
+      <li><a href="#title-page" class="nav-dot" data-section="title-page"><span>Title Page</span></a></li>
+      <li><a href="#hook" class="nav-dot" data-section="hook"><span>Hook</span></a></li>
+      <li><a href="#rising-insights" class="nav-dot" data-section="rising-insights"><span>Rising Insights</span></a></li>
+      <li><a href="#main-message" class="nav-dot" data-section="main-message"><span>Main Message</span></a></li>
+      <li><a href="#solutions" class="nav-dot" data-section="solutions"><span>Solutions</span></a></li>
+      <li><a href="#credits" class="nav-dot" data-section="credits"><span>Credits</span></a></li>
+    </ul>
+  </nav>
+
+  <!-- Title Page Section -->
+  <section id="title-page">
+    <!--Credits to https://alistairshepherd.uk/writing/parallax-svg-landscape-2/ for the mountain SVG-->
+    <div class="landscape" role="img">
+      <div class="title-page-title-section">
+        <h1 class ="title-page-title">The Deadly Historical Heights</h1>
+        <h5>A Deep Dive into Climber Mortality in the Himalayas</h5>
+      </div>
+      <div class = "mountains_group">
+        <div class="landscape_layer mountains" style="--offset:0.86">
+          <div class="landscape_image">
+            <svg viewBox="0 0 4000 1000" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 408s1229-15 1235-22c8-10 23-16 37-15 19 0 37-2 56-5 20-3 40-2 60-6 31-3 61-6 91-15 23-7 48-9 71-17 40-13 80-24 119-41 20-7 40-15 61-21 29-10 61-6 90 2l44 8c22 3 44 9 65 13 19 4 37 9 54 16 11 4 23 9 35 9 19 0 39 1 58 6 13 4 26 10 39 13l41 12c24 8 50 13 76 17 22 3 43 7 64 14 52 18 105 35 158 49 11 3 22-2 33 2 4 2 8 6 10 10h388c47-1 79-3 80-4 6-11 14-19 25-25 19-11 38-24 60-26l33-7 44-11c59-12 119-23 179-33 30-6 62-10 92-18 39-11 78-21 118-23 23 0 45-2 67 3 17 3 34 6 49 13 23 10 45 23 69 34 15 6 28 16 43 23 16 8 34 14 51 22 16 7 35 14 52 9 7-2 14-1 21 0 20 2 39-1 58-3 15-1 27 12 42 11l32 1v597H0V408z" style="fill: #b1b1b1;"/>
+              <path d="M3470 296c15-3 31-5 46-6 23 0 45-2 67 3 17 3 34 6 49 13 23 10 45 23 69 34 15 6 28 16 43 23 16 8 34 14 51 22 16 7 35 14 52 9 7-2 14-1 21 0 20 2 39-1 58-3 15-1 27 12 42 11l32 1v84c-16 49-56 84-111 112l-171-143s39-18 40-26c0-2-8-9-17-12-12-4-41-10-56-10-9 0-24-6-26-10-2-2 0-4 3-5 0 0-13-12-22-14-9-3-25-1-31-1-3 0-5-3-2-4 3-3 13-4 20-4 0 0-26-15-41-20a267 267 0 00-88-8c-4 1-6-3-3-6 7-5 36-9 47-14 0 0-11-3-15-6l-8-8c-9-2-35-5-45-10l-4-2zm-1705-21c31 2 158 35 158 35-18 2-21 2-20 12 1 9 14 12 16 16-3 4-1 8 0 10-10 5-40 18-60 23-11 2-27 3-34 2-5-1-8-7-12-10s-11-4-11-6c1-3 9-7 15-9l16-4c4-1 3-9-1-10l-26-1c-9 0-19 2-24 3-1-4-4-4-5-6-1-3 5-7 0-12-6-4-10-2-15-2 6-6 23-10 28-12 5-3 4-9-3-11-7-3-36-5-42-7 3-5 13-12 20-11z" style="fill: #a2a2a2;"/>
+            </svg>
+          </div>
         </div>
-        <div class="description">
-          <p>
-            This background visualization represents the historical trends and patterns in Himalayan climbing, highlighting the mortality data over the years.
-          </p>
+    
+        <div class="landscape_layer valley_3" style="--offset:0.83">
+          <div class="landscape_image">
+            <svg viewBox="0 0 4000 1000" xmlns="http://www.w3.org/2000/svg">
+              <path d="M396 354c9 0 18-3 27-5 7-1 14 0 20 2 17 3 34-1 51 2 9 2 19 2 29 2 13 1 26-3 39-1 11 2 22 1 33 1 16-2 33 1 49-1 22-2 44 3 66 2 16 0 31 4 46 5 9 0 18 4 28 4 6 1 12 0 18-1 12-1 22-6 34-7l33-2c10-1 19 4 29 4 9 1 18 1 27 4 14 3 28 3 42 3 19 1 39-2 59 2 15 3 30 6 46 6 17-1 35 0 52-4 23-5 47-5 70-3 17 2 32 11 48 15 27 7 56 10 84 10 16-1 31 6 45 13 10 4 20 4 30 7 6 2 10 9 16 12 7 2 15-2 22-5 12-4 25-2 37-5 23-6 47-1 70-4 15-3 29 9 43 3 13-5 28-10 43-7s29 6 44 7c9 0 17-5 26-5 16 0 33 2 49-1 10-2 18-7 28-8 8-1 17 3 25 1 31-11 63-4 94-10 11-2 23-3 34-2 14 0 28-5 42-4 11 1 20 7 31 9 9 2 18-1 27-3 13-2 26 1 38-2l18-6c7 0 14 4 21 4 13 0 26 3 40 4 11-1 20 8 31 8s22 0 33-3 22-8 33-10l28-5c4-1 8 3 11 5 13 1 27 6 39 1 7-2 14 1 21 3 12 4 24 6 37 9 11 3 22 1 34 3 7 1 15 4 23 4h35c9 1 17 5 26 6l29 4c13 3 27 1 41 2 10 0 19 5 28 6l36 3c14 3 28 2 42 2 12 0 24 2 35 0 12-1 23-4 33-7 10-4 20-3 30-3 11 0 21-5 32-6 13 0 27-1 40-4 7-2 14-7 22-7 8-1 17-1 25-4 13-4 26-2 39-3l23 1c12 2 24 1 35 5 9 3 19 5 29 5 8 0 16-2 24-4 11-2 22 1 32 0l27-1c11 0 22-3 33-1l37 3c11 0 22 6 33 5l21 1c10 3 20-2 30-3 16-2 32-6 48-1 16 6 34 1 51 3l55-7c8-1 16 3 24 3 9 0 17-8 26-8s17 6 24 11c12 9 26 17 42 18 15 2 31 3 46 1 25-3 50-7 74-13 13-2 25-10 39-8 18 2 37 4 55 3 17-1 34 2 51 0 12-2 24 0 36 1 7 0 12-6 19-8 8 0 16 2 25 1 12-3 23 3 35 3 13 2 25-5 37-5 10-2 18 8 29 7 9-1 18-3 28-3v597H0V391l36-5c11-1 23 1 34 3 17-3 34-9 52-8 15 1 31-2 46-3 9-1 15-7 24-8 13 0 26 1 39-4 5-1 10-5 16-5 20 1 39-1 59-1 16 1 30-6 46-6l24-2c7-1 13 2 20 2z" style="fill: #838383;"/>
+            </svg>
+          </div>
+        </div>
+        
+        <div class="landscape_layer valley_2" style="--offset:0.8">
+          <div class="landscape_image">
+            <svg viewBox="0 0 4000 900" xmlns="http://www.w3.org/2000/svg">
+              <path d="M651 500c3-5 8-9 14-11 7-2 15 0 23 0 32 2 64 9 96 2 11-2 20-9 30-11 16-3 33-2 50-4 15-2 29 7 44 2 14-6 29-6 44-6 8 0 16 3 24 4 8-1 16-4 24-4 13 0 25 3 38 2 35-2 71 0 106 2 19 1 38-5 56 1 15 5 31 2 46 2l35 2c10 2 21-2 31-2 19-1 38-5 57-8 7-1 13 2 20 4 7 3 14 3 22 5l20 8 18 2c13 1 25 8 39 7 17-1 34-2 51 0 14 2 27-5 41-6 12 0 23-6 34-8 14-3 26 5 40 4 20-1 39-10 56-21 11-6 24-4 36-4 25 2 49-3 74-3 14 1 26-7 40-8l20-5c12 0 25 5 36-2 7-5 16-8 26-7 7 1 13 6 19 10 11 5 23 6 35 7 10 1 19 6 29 7 11 2 22 0 33 2 8 1 15 5 23 6 9 2 18 1 28 3l20 5c21 3 42 0 63 3 10 0 19 5 28 6 9 2 19 2 28 2 11-1 20 5 30 5 17 0 34 6 51 8 12 2 25 0 37 0 31 7 62 0 92-5 10-2 20 1 30 2 21 2 41-5 62-4 23-2 47 2 69-5 26-7 52-13 79-16 19-4 38-3 56-9 18-4 36-9 54-9 10-1 18-6 28-7 8 0 16 1 23-3 10-5 22-4 33-4 10 0 20 0 30 3 8 3 16-2 24-3 18-3 36 0 54-1 8-3 17-4 26-6 16-6 32 3 48 1 15-1 29-5 44-4 12 1 19-10 30-13 9-1 17 2 26 1 13-2 26 5 39 3 8-1 14-6 22-9 6-1 13 2 19 3 15 4 31 1 46 5 14 3 29-2 43 2 9 3 17-4 25-6 11-4 22-11 34-11 20-1 40 2 60 4 14 0 26-7 38-10l54-5c11 0 20-7 31-8 14 1 27 10 41 11 13-3 26-8 40-6 5 1 7 7 13 9 5 2 11 2 16 6 11 8 23 15 34 24 5 5 10 9 16 12 6 0 12-2 19-1l24 6c19 6 34 22 54 23 8 1 16 4 23 8 16 9 34 13 48 24 16 6 32 14 43 27 6 7 16 7 24 10 8 5 13 12 20 17v443H651V500z" style="fill: #737373;"/>
+            </svg>
+          </div>
+        </div>
+        
+        <div class="landscape_layer foreground_valley" style="--offset:0.75">
+          <div class="landscape_image">
+            <svg viewBox="0 0 4000 1000" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3954 700l46 14v286H0V480l22-1c12 0 24-4 36-5 11-1 21-4 31-7 16-5 33-2 49-4 15 0 30-7 45-2 17 5 33 16 43 31 4 6 11 7 18 8 15 2 29 1 44 0s27 12 42 11c21 1 43-8 64-1 15 4 25 15 37 23 7 4 11 10 17 15 11 4 24 3 35 7 10 3 20 7 30 8 13 3 25 0 37 1 15 1 31-5 45 1 16 6 33 5 49 7 12 1 22 7 32 12 6 3 10 9 16 11h22c7 1 13 6 20 6 13 1 25 1 37 6 11 3 20 9 30 13 11 3 23 4 34 9 8 4 14 11 21 15 15 5 31 7 45 15 10 6 21 6 31 10 12 4 24 4 36 4 3-5 5-10 9-14 4-3 10-5 15-7 6-3 11-7 17-9 8-2 18-1 26-4 11-2 23-4 34-2 8 2 14 8 22 10 7 2 15 1 23 1 12-1 24 0 36-4 19-6 40-9 59-3 11 5 23 11 31 21l8 8 19-1c8-3 16-9 25-8 16 3 26 16 40 22 12-1 25-5 36-1 10 2 16 10 23 15 11 4 23 2 35 6l24 3c11 0 21 5 32 9 8-7 17-12 28-13 11-2 23 0 34 2 5-2 10-6 14-9 4-7 6-15 12-19 11-9 26-8 40-6 20 4 41 10 58 22 8 4 13 11 16 19h30c4 1 6-2 9-4 9-8 23-10 34-6 14 5 28 2 42 6 8 2 14-4 20-6 18-6 37-3 54 0 7 2 13-3 20-4 14-2 27 1 41 3 9 1 18 2 27 5 5 2 9 7 14 9l19 4c9 3 17 8 25 13 6 4 13-1 20-2 23-2 47 6 66 20 2 2 5 5 9 4l24-3c6 0 10-6 16-8 12-7 27-5 41-5 11 2 23 1 34 2 11 2 20 9 27 16 14-2 27-4 40-1 27 3 47 22 72 28l33 9c3 1 8 2 11-1 8-6 14-13 23-18 6-3 14-3 22-5 7-5 12-12 19-15 23-11 52-6 71 11 11 7 16 19 28 24s25 9 38 12c8 2 14-5 22-6l27-4c29 0 54 17 82 21 22 3 44-6 66-5 25 0 49 3 74 2 41-2 80 11 119 22 21 7 43 12 64 20 6 3 12 5 19 6l72 3c10 1 18-7 27-9 10-4 22-2 31-9l27-17c10-7 22-14 35-13 11 0 21 7 32 8 13 0 26-2 38-7 7-4 16-3 23-6l4-13-15-1c-1 5-3 8-7 10v-11c-5 2-9 5-11 11l-9-2c6-5 6-14 9-20 4-8 14-2 20-5 10-5 20-6 30-9-1-3-3-6-6-8l12-1-5-7v-5c5 0 10 1 15-2 4-5 5-12 10-17l-6-8-11 4c-4-2-8-6-11-2-3 6-3 12-4 17-4 2-9 3-14 2 5-2 11-4 13-10v-11c-4 4-7 9-12 12l-13-8-14 5c5-6 13-7 19-12l-3-7-4 6c-5-3-13-7-11-15 6-6 15-3 23-4l-1-5-9-4 1-6c13-1 26-4 38 2l1-12-22 4c9-15 30-3 39-17-5-5-10-10-17-12l2-9-7 1 3-6-6-2c12-5 22 5 34 3 4-5-4-5-7-6l2-19c-4 6-11 6-17 6l-3 11c-11 1-22 1-31-5l2-9 10-1c3-4 9-7 8-13-4 1-8 4-11 7-6-4-4-10-2-16l15 2 5-6c-3-3-6-6-6-11 5-1 11-1 17 2 8 4 17 0 26 0l-2-15 5-13c-6-6-12-11-17-18 7-2 14-5 18-12l-9 1c2-8 4-17 0-24 6 4 15 9 20 1l-7-10 8 3 8-8 12-1 2 9-6 9c4-1 8 0 12 1-5 5-14 11-8 18l-7 10 11 8c-7 1-13-4-20-2 3 9 12 13 19 18 3 2 1 7 2 11l22 2v5c-4 2-8 5-10 9l-8-8 1 15-5-7c-5-1-13-2-13 5 1 10 10 16 13 26l-8 4c5 8 11 15 19 20l-2 8-7-3c3 7 10 11 16 14v8l7 5c-1 5-2 10-1 14 5 4 11 6 17 7l3 8 7 2-8 5c5 5 10 10 13 16 0 5-1 10-6 11h-20c-11-3-18-14-24-23 0 5-1 10 3 14l17 23c4 6 12 5 18 8l8 11 2-14c5 3 11 8 18 7 8-4 15-9 22-15-11 0-19-8-27-14l1-1 1-2h1c6 3 12 6 19 7-4-6-7-13-13-17-4-4-8-8-8-14 9 1 15 9 23 13 2-3 5-5 5-8-1-4-4-6-6-9-4-5-2-12-3-18 8 2 16 3 24 1l-1-7-12-9h15l15-5 3-6 18 6c7 2 12 7 18 10h14s83 4 144 5c23 0 59 7 70 11 16 8 44 11 64 16l20 5z" style="fill: #eeeeee;"/>
+            </svg>
+          </div>
         </div>
       </div>
-    </section>
+  </div>
+  </section>
 
+  <div class="container">
     <!-- Hook Section -->
     <section id="hook" class="section-gap">
       <h2 class="text-center">Hook Section</h2>
@@ -59,7 +101,7 @@
     <section id="rising-insights" class="section-gap">
       <h2 class="text-center">Rising Insights</h2>
       <!-- Visualization Pair 1 -->
-      <div class="viz-section">
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
         <div class="viz" id="insight-viz-1">
           <!-- Rising insights visualization 1 placeholder -->
           <svg id="myCliffSvg"></svg>
@@ -71,7 +113,7 @@
         </div>
       </div>
       <!-- Visualization Pair 2 -->
-      <div class="viz-section">
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
         <div class="viz" id="insight-viz-2">
           <div class="viz-title">Leading Causes of Death</div>
           <div class="viz" id="insight-viz-2-viz"></div>
@@ -93,14 +135,27 @@
         </div>
       </div>
       <!-- Visualization Pair 3 -->
-      <div class="viz-section">
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
+        <div class = "description-title">
+          <h2>Completed expeditions</h2>
+          <p>What are the age groups and genders of individuals who have completed Himalayan expeditions?</p>
+        </div>
         <div class="viz" id="insight-viz-3">
           <!-- Rising insights visualization 3 placeholder -->
-        </div>
+        </div> 
         <div class="description">
-          <p>
-            Description for rising insights visualization 3.
-          </p>
+          <!--Category Select-->   
+          <select id='categorySelectorDotGraph' class="custom-select align-self-center" style="width: 50%" onchange="categoryChangeDotGraph()">
+            <option value="sex" selected>Sex/Gender</option>
+            <option value="age_group">Age Group</option>
+          </select>  
+          <div class = "text-for-sex">
+            <p>Out of all the total successful expeditions, <strong>91.99%</strong> of the climbers were male while <strong>8.01%</strong> of the climbers were female.</p>
+            <p>However, the success rate for both groups was almost equal with female climbers having a success rate of <strong>32.91%</strong> while for male climbers it was <strong>39.04%</strong>.</p>
+          </div>
+          <div class = "text-for-age-group">
+            <p>The age group that makes up most of the successful expeditions was <strong>30 to 39 years old</strong>. However, the group with the highest success rate was <strong>13 to 19 years old</strong>.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -109,30 +164,38 @@
     <section id="main-message" class="section-gap">
       <h2 class="text-center">Main Message</h2>
       <!-- Visualization Pair 1 -->
-      <div class="viz-section">
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
+        <div class = "description-title">
+          <h2>Supplemental Oxygen Use</h2>
+          <p>What percentage of climbers, across different age groups and genders, use supplemental oxygen during their expeditions?</p>
+        </div>
         <div class="viz" id="main-viz-1">
           <!-- Main message visualization 1 placeholder -->
-        </div>
-        <div class="description">
-          <p>
-            Description for main message visualization 1.
-          </p>
+        </div> 
+        <div class="description"> 
+          <div class = "text-for-sex-2">
+            <p>Out of all expeditions, <strong>91.57%</strong> of oxygen used was by male climbers while only <strong>8.43%</strong> of were used by females climbers.</p>
+            <p>However, the oxygen use rate for both groups was close to equal with female climbers having a rate of <strong>21.91%</strong> while for male climbers it was <strong>24.59%</strong>.</p>
+          </div>
+          <div class = "text-for-age-group-2">
+            <p>The age group that used the most oxygen was <strong>30 to 39 years old</strong>. However, the age group that had the highest rate of oxygen use was <strong>13 to 19 years old</strong>.</p>
+          </div>
         </div>
       </div>
       <!-- Visualization Pair 2 -->
-      <div class="viz-section">
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
         <div class="viz" id="main-viz-2">
           <!-- Main message visualization 2 placeholder -->
         </div>
         <div class="description">
-          <h2 class = "description-title">Most Number of Deaths</h2>
+          <h2 class = "description-title">Mountain Peaks To Be Cautious About</h2>
           <p>We found the mountain peak in the Himalayas with the most number of deaths was <strong>Everest</strong> at <strong>219</strong> deaths.
           Out of the top 20 peaks with the highest number of deaths, the lowest height that is reached by an expedition member was <strong>4400 m</strong>, which was on Ama Dablam.  
-          On the other hand, the highest height that is reached was on Mount Everest at <strong>8850 m</strong>.</p>
+          On the other hand, the highest height that is reached was on Mount Everest at <strong>8850 m</strong>. Climbers should be wary when climbing these peaks.</p>
         </div>
       </div>
       <!-- Visualization Pair 3 -->
-      <div class="viz-section">
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
         <div class="viz" id="main-viz-3">
           <!-- Main message visualization 3 placeholder -->
         </div>
@@ -144,7 +207,7 @@
         </div>
       </div>
       <!-- Visualization Pair 4 -->
-      <div class="viz-section">
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
         <div class="viz" id="main-viz-4">
           <!-- Main message visualization 4 placeholder -->
           <div class="viz-title">Average Death Rate Over The Years</div>
@@ -208,12 +271,20 @@
   <!-- jQuery and Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!--AOS library-->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <!-- Custom JS -->
+  <script src="js/navigation.js"></script>
   <script src="js/stackedAreaChart.js"></script>
+  <script src="js/dotGraph.js"></script>
   <script src="js/deathRateChart.js"></script>
   <script src="js/seasonChart.js"></script>
   <script src="js/guessLineChart.js"></script>
   <script src="js/cliffChart.js"></script>
+  <script src="js/titlePageAnimation.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    AOS.init();
+  </script>
 </body>
 </html>
