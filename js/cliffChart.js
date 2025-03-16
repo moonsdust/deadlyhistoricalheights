@@ -33,7 +33,7 @@ class CliffChart {
      */
     constructor(membersData) {
         // 1) Store data and sort by year
-        this.data = this.prepareData(membersData);;
+        this.data = this.prepareData(membersData);
         this.data.sort((a, b) => d3.ascending(a.year, b.year));
 
         // 2) Chart dimensions
@@ -61,19 +61,19 @@ class CliffChart {
      */
     prepareData(membersData) {
         // A) Clean & parse each row
-        membersData.forEach(d => {
-            // Convert year to a number (assuming a "year" column)
-            d.year = +d.year;
-
-            // Convert "died" to a boolean or 0/1
-            // If the CSV has "TRUE"/"FALSE", do:
-            d.died = (d.died && d.died.toUpperCase() === "TRUE") ? 1 : 0;
+        // Make a new array of cleaned rows
+        const cleanedRows = membersData.map(d => {
+            return {
+                year: +d.year,
+                died: (d.died && d.died.toUpperCase() === "TRUE") ? 1 : 0
+                // plus any other columns you need
+            };
         });
 
         // B) Group by year, sum the died column
         //    We'll use d3.rollup for grouping:
         const deathsByYear = d3.rollup(
-            membersData,
+            cleanedRows,
             rows => d3.sum(rows, r => r.died),
             d => d.year
         );
