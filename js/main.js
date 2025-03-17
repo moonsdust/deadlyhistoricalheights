@@ -5,8 +5,12 @@ ChatGPT was used to assist in the development of this project.
 // init global variables, switches, helper functions
 let seasonChart;
 let stackedAreaChart, stackedAreaChartTimeline;
+let deathChart;
+let guessLineChart;
+let dotGraphCompletion;
+let dotGraphOxygenUse;
 
-
+let selectedCategoryForDotGraph = document.getElementById('categorySelectorDotGraph').value; // This would indicate what the current value for the select is (age or gender)
 
 // load data using promises
 let promises = [
@@ -29,12 +33,43 @@ function initMainPage(allDataArray) {
     let membersData = allDataArray[1];
     let peaksData = allDataArray[2];
     let stackedAreaChartData = setupStackedAreaChartData(membersData);
-    seasonChart = new SeasonChart("main-viz-3", membersData);
+    let guessLineChartData =  setupGuessLineChartData(membersData);
+
+    // console.log(guessLineChartData);
+
+    cliffChart = new CliffChart(membersData);
+    // 2) Use IntersectionObserver to watch the container
+    const container = document.getElementById("insight-viz-1");
+
+    const observerOptions = {
+    threshold: 0.3 // means 30% of container must be visible to trigger
+    };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+        // Start the animation
+        cliffChart.startFlow();
+        
+        // Unobserve so it doesn't trigger again
+        obs.unobserve(entry.target);
+        }
+    });
+    }, observerOptions);
+
+    observer.observe(container);
+
+
     stackedAreaChart = new StackedAreaChart("insight-viz-2-viz", stackedAreaChartData.layers);
     stackedAreaChartTimeline = new Timeline("insight-viz-2-timeline", stackedAreaChartData.years);
+    deathRateChart = new DeathRateChart("main-viz-2", membersData);
+    seasonChart = new SeasonChart("main-viz-3", membersData);
+    guessLineChart = new GuessLineChart("main-viz-4", guessLineChartData);
+    dotGraphCompletion = new DotGraph("insight-viz-3", membersData, "success");
+    dotGraphOxygenUse = new DotGraph("main-viz-1", membersData, "oxygen_used");
 }
 
-function setupStackedAreaChartData(rawData) {
+function setupStackedAreaChartData(data) {
     let parseDate = d3.timeParse("%Y");
 
     let preparedData = {
@@ -42,21 +77,15 @@ function setupStackedAreaChartData(rawData) {
         years: []
     };
 
-    let yearMap = {}; // Stores total deaths per year
-    let causeMap = {}; // Stores deaths by cause per year
-    let minYear = Infinity, maxYear = -Infinity;
+    let yearMap = {}; 
+    let causeMap = {};
+    const minYear = 1905, maxYear = 2019;
 
-    // Process raw data
-    rawData.forEach(d => {
+    data.forEach(d => {
         let year = parseInt(d.year);
         let cause = d.death_cause?.trim().toLowerCase();
 
-        // Skip if cause is "na"
         if (cause === "na") return;
-
-        // Update min and max year for continuity
-        if (year < minYear) minYear = year;
-        if (year > maxYear) maxYear = year;
 
         if (!yearMap[year]) {
             yearMap[year] = { Year: parseDate(year.toString()), TotalDeaths: 0 };
@@ -66,36 +95,63 @@ function setupStackedAreaChartData(rawData) {
             causeMap[year] = { Year: parseDate(year.toString()) };
         }
 
-        // Increase death count for this cause
         causeMap[year][cause] = (causeMap[year][cause] || 0) + 1;
         yearMap[year].TotalDeaths += 1;
     });
 
-    // Get all unique causes of death (excluding "na")
-    let allCauses = new Set(rawData.map(d => d.death_cause?.trim().toLowerCase()).filter(c => c && c !== "na"));
+    let allCauses = new Set(data.map(d => d.death_cause?.trim().toLowerCase()).filter(c => c && c !== "na"));
 
-    // Ensure every year has all causes
     for (let year = minYear; year <= maxYear; year++) {
         if (!causeMap[year]) {
             causeMap[year] = { Year: parseDate(year.toString()) };
         }
         allCauses.forEach(cause => {
             if (!causeMap[year][cause]) {
-                causeMap[year][cause] = 0; // Fill missing causes
+                causeMap[year][cause] = 0;
             }
         });
     }
 
-    // Convert to array format for visualization
     preparedData.layers = Object.values(causeMap).sort((a, b) => a.Year - b.Year);
     preparedData.years = Object.values(yearMap).sort((a, b) => a.Year - b.Year);
-
-    console.log(preparedData);
-
     return preparedData;
 }
 
 
+function setupGuessLineChartData(membersData) {
+    let yearMap = {};
+    const minYear = 1905, maxYear = 2019;
+
+    membersData.forEach(d => {
+        let year = parseInt(d.year);
+        if (isNaN(year) || year < minYear || year > maxYear) return; 
+        let died = d.died && d.died.toLowerCase() === "true";
+
+        if (!yearMap[year]) {
+            yearMap[year] = { Year: d3.timeParse("%Y")(year.toString()), totalMembers: 0, totalDeaths: 0 };
+        }
+
+        yearMap[year].totalMembers += 1;
+        if (died) {
+            yearMap[year].totalDeaths += 1;
+        }
+    });
+
+    for (let year = minYear; year <= maxYear; year++) {
+        if (!yearMap[year]) {
+            yearMap[year] = { Year: d3.timeParse("%Y")(year.toString()), totalMembers: 0, totalDeaths: 0 };
+        }
+    }
+
+    let deathRateData = Object.values(yearMap)
+        .map(d => ({
+            Year: d.Year,
+            DeathRate: d.totalMembers > 0 ? d.totalDeaths / d.totalMembers : 0
+        }))
+        .sort((a, b) => a.Year - b.Year);
+
+    return deathRateData;
+}
 
 
 
@@ -110,3 +166,24 @@ function stackedAreaChartBrushed() {
 	stackedAreaChart.wrangleData();
 
 }
+
+function categoryChangeDotGraph(){
+    // Updates the dot graphs based on the selected value 
+    selectedCategoryForDotGraph = document.getElementById('categorySelectorDotGraph').value;
+
+    if (selectedCategoryForDotGraph === "sex") {
+        document.querySelector(".text-for-sex").style.display = 'block';
+        document.querySelector(".text-for-sex-2").style.display = 'block';
+        document.querySelector(".text-for-age-group").style.display = 'none';
+        document.querySelector(".text-for-age-group-2").style.display = 'none';
+    } 
+    else {
+        document.querySelector(".text-for-sex").style.display = 'none';
+        document.querySelector(".text-for-sex-2").style.display = 'none';
+        document.querySelector(".text-for-age-group").style.display = 'block';
+        document.querySelector(".text-for-age-group-2").style.display = 'block';
+    }
+
+    dotGraphCompletion.wrangleData(); 
+    dotGraphOxygenUse.wrangleData();
+ }
