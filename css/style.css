@@ -285,3 +285,12 @@ h1, h2, h3 {
 .foreground_valley {
   z-index: 100;
 }
+
+/* Solutions section */
+.solutions-suggestions {
+  margin-left: 10%;
+}
+.solutions-suggestions img {
+  width: 50%;
+  margin-left: 40px;
+}
