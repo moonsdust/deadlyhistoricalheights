@@ -157,6 +157,7 @@ h1, h2, h3 {
   to {
     opacity: 0;
   }
+}
 
 #main-viz-4, #insight-viz-2{
   flex-direction: column;
