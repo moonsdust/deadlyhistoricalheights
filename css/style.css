@@ -91,6 +91,73 @@ h1, h2, h3 {
   text-decoration: underline;
 }
 
+/* Make the quiz container wider */
+#hook-quiz {
+  max-width: 800px;  /* increased from 500px to 800px */
+  margin: 0 auto;    /* center horizontally */
+  text-align: center;
+  padding: 1rem;
+}
+
+/* The quiz-content wrapper */
+.quiz-content {
+  background-color: #f8f9fa; /* light background (Bootstrap gray-100) */
+  border-radius: 8px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Container for the option buttons; allow wrapping */
+.quiz-options {
+  margin-top: 1.5rem;
+  display: flex;            /* use flex layout */
+  flex-wrap: wrap;          /* allow buttons to wrap onto new lines */
+  justify-content: center;  /* center them horizontally */
+}
+
+/* Quiz option buttons */
+.quiz-btn {
+  min-width: 120px;       /* ensure each button has some minimum width */
+  margin: 0.5rem;         /* spacing around each button */
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  background-color: #007bff; /* Bootstrap primary blue */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quiz-btn:hover {
+  background-color: #0056b3; /* darker blue on hover */
+}
+
+/* Fade-in animation */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+/* Fade-out animation */
+.fade-out {
+  animation: fadeOut 0.5s forwards;
+}
+
+/* Keyframes for fadeIn and fadeOut */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+
 #main-viz-4, #insight-viz-2{
   flex-direction: column;
 }
