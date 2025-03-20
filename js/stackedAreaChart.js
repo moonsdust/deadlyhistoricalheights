@@ -36,7 +36,7 @@ class StackedAreaChart {
     initVis(){
         let vis = this;
 
-        this.margin = { top: 20, right: 20, bottom: 20, left: 30 };
+        this.margin = { top: 20, right: 20, bottom: 35, left: 35 };
         this.width = 800 - this.margin.left - this.margin.right;
         this.height = 400 - this.margin.top - this.margin.bottom;
 
@@ -80,6 +80,7 @@ class StackedAreaChart {
         vis.svg.append("g")
             .attr("class", "y-axis axis");
 
+
         let stack = d3.stack()
                     .keys(vis.dataCategories);
 
@@ -106,6 +107,26 @@ class StackedAreaChart {
                             .style("fill", "black")
                             .style("font-weight", "600")
                             .style("font-size", "16px");
+
+
+        vis.svg.append("text")
+            .attr("class", "x-axis-label")
+            .attr("x", vis.width / 2)
+            .attr("y", vis.height + 35)
+            .style("text-anchor", "middle")
+            .style("font-size", "14px")
+            .style("fill", "#333")
+            .text("Year");
+
+        vis.svg.append("text")
+            .attr("class", "y-axis-label")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -vis.height / 2)
+            .attr("y", -25)
+            .style("text-anchor", "middle")
+            .style("font-size", "14px")
+            .style("fill", "#333")
+            .text("Number of Deaths");
                             
         // (Filter, aggregate, modify data)
         vis.wrangleData();
@@ -186,9 +207,9 @@ class Timeline {
 	initVis() {
 		let vis = this;
 
-        this.margin = { top: 20, right: 20, bottom: 20, left: 20 };
+        this.margin = { top: 20, right: 20, bottom: 35, left: 35 };
         this.width = 800 - this.margin.left - this.margin.right;
-        this.height = 200 - this.margin.top - this.margin.bottom;
+        this.height = 250 - this.margin.top - this.margin.bottom;
 
 		// SVG drawing area
 		vis.svg = d3.select("#" + vis._parentElement).append("svg")
@@ -232,6 +253,25 @@ class Timeline {
 			.attr("class", "x-axis axis")
 			.attr("transform", "translate(0," + vis.height + ")")
 			.call(vis.xAxis);
+
+        vis.svg.append("text")
+            .attr("class", "x-axis-label")
+            .attr("x", vis.width / 2)
+            .attr("y", vis.height + 35)
+            .style("text-anchor", "middle")
+            .style("font-size", "14px")
+            .style("fill", "#333")
+            .text("Year");
+
+        vis.svg.append("text")
+            .attr("class", "y-axis-label")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -vis.height / 2)
+            .attr("y", -25)
+            .style("text-anchor", "middle")
+            .style("font-size", "14px")
+            .style("fill", "#333")
+            .text("Number of Deaths");
 
 	}
 }

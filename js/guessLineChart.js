@@ -75,6 +75,16 @@ class GuessLineChart {
                                     .attr("fill", "transparent")
                                     .style("cursor", "crosshair");
 
+        vis.svg.append("text")
+                .attr("class", "x-axis-label")
+                .attr("x", vis.width / 2)
+                .attr("y", vis.height + 55)
+                .style("text-anchor", "middle")
+                .style("font-size", "14px")
+                .style("fill", "#333")
+                .text("Year");
+                        
+
         vis.isDrawing = false;
 
         vis.overlay.on("mousedown", () => { vis.isDrawing = true; vis.userDrawnPoints = []; });
