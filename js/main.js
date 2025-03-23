@@ -83,7 +83,6 @@ function setupStackedAreaChartData(data) {
     let causeMap = {};
     let totalCauseCounts = {};
 
-    // Step 1: Count total deaths by cause
     data.forEach(d => {
         let rawCause = d.death_cause?.trim().toLowerCase();
         if (!rawCause || rawCause === "na") return;
@@ -92,13 +91,11 @@ function setupStackedAreaChartData(data) {
         totalCauseCounts[cause] = (totalCauseCounts[cause] || 0) + 1;
     });
 
-    // Step 2: Determine top 5 causes
     let topCauses = Object.entries(totalCauseCounts)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5)
         .map(([cause]) => cause);
 
-    // Step 3: Count per-year deaths for top causes only
     data.forEach(d => {
         let year = parseInt(d.year);
         if (isNaN(year) || year < minYear || year > maxYear) return;
@@ -108,7 +105,6 @@ function setupStackedAreaChartData(data) {
 
         let cause = rawCause.charAt(0).toUpperCase() + rawCause.slice(1);
 
-        // Only consider top causes
         if (!topCauses.includes(cause)) return;
 
         if (!yearMap[year]) {
@@ -123,7 +119,6 @@ function setupStackedAreaChartData(data) {
         yearMap[year].TotalDeaths += 1;
     });
 
-    // Step 4: Fill in missing years and zero-fill top causes
     for (let year = minYear; year <= maxYear; year++) {
         if (!causeMap[year]) {
             causeMap[year] = { Year: parseDate(year.toString()) };
@@ -140,7 +135,6 @@ function setupStackedAreaChartData(data) {
         }
     }
 
-    // Step 5: Return sorted data
     preparedData.layers = Object.values(causeMap).sort((a, b) => a.Year - b.Year);
     preparedData.years = Object.values(yearMap).sort((a, b) => a.Year - b.Year);
 
