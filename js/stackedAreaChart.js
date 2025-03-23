@@ -36,7 +36,7 @@ class StackedAreaChart {
     initVis(){
         let vis = this;
 
-        this.margin = { top: 20, right: 20, bottom: 35, left: 35 };
+        this.margin = { top: 20, right: 20, bottom: 55, left: 35 };
         this.width = 800 - this.margin.left - this.margin.right;
         this.height = 400 - this.margin.top - this.margin.bottom;
 
@@ -48,34 +48,35 @@ class StackedAreaChart {
             .attr("transform", "translate(" + vis.margin.left + "," + vis.margin.top + ")");
 
         // Overlay with path clipping
-        vis.svg.append("defs").append("clipPath")
-        .attr("id", "clip")
-        .append("rect")
-        .attr("width", vis.width)
-        .attr("height", vis.height);
+        vis.svg.append("defs")
+                .append("clipPath")
+                .attr("id", "clip")
+                .append("rect")
+                .attr("width", vis.width)
+                .attr("height", vis.height);
 
         vis.chartArea = vis.svg.append("g")
-        .attr("class", "chart-area")
-        .attr("clip-path", "url(#clip)");
+                                .attr("class", "chart-area")
+                                .attr("clip-path", "url(#clip)");   
 
         // Scales and axes
         vis.x = d3.scaleTime()
-            .range([0, vis.width])
-            .domain(d3.extent(vis.data, d=> d.Year));
+                .range([0, vis.width])
+                .domain(d3.extent(vis.data, d=> d.Year));
 
         vis.y = d3.scaleLinear()
-            .range([vis.height, 0]);
+                .range([vis.height, 0]);
 
 
         vis.xAxis = d3.axisBottom()
-            .scale(vis.x);
+                    .scale(vis.x);
 
         vis.yAxis = d3.axisLeft()
-            .scale(vis.y);
+                    .scale(vis.y);
 
         vis.svg.append("g")
             .attr("class", "x-axis axis")
-            .attr("transform", "translate(0," + vis.height + ")");
+            .attr("transform", "translate(0," + vis.height + ")"); 
 
         vis.svg.append("g")
             .attr("class", "y-axis axis");
@@ -112,12 +113,12 @@ class StackedAreaChart {
         vis.svg.append("text")
             .attr("class", "x-axis-label")
             .attr("x", vis.width / 2)
-            .attr("y", vis.height + 35)
+            .attr("y", vis.height + 32)
             .style("text-anchor", "middle")
             .style("font-size", "14px")
             .style("fill", "#333")
             .text("Year");
-
+        
         vis.svg.append("text")
             .attr("class", "y-axis-label")
             .attr("transform", "rotate(-90)")
@@ -127,7 +128,92 @@ class StackedAreaChart {
             .style("font-size", "14px")
             .style("fill", "#333")
             .text("Number of Deaths");
+
+    // Legend Group
+    vis.legend = vis.svg.append("g")
+    .attr("class", "legend-group")
+    .attr("transform", `translate(${0}, ${vis.height + 40})`);
+
+
+    // Draw legend items
+    let offset = 125;
+
+    // Manually Draw Legend Items
+    let legendItem = vis.legend.append("g")
+                               .attr("transform", `translate(${offset + 10}, 0)`);
+    
+    legendItem.append("rect")
+        .attr("width", 14)
+        .attr("height", 14)
+        .attr("fill", vis.colorScale('Fall'));
+
+    legendItem.append("text")
+        .attr("x", 20)
+        .attr("y", 12)
+        .style("font-size", "12px")
+        .text('Fall');
+
+
+
+    legendItem = vis.legend.append("g")
+                            .attr("transform", `translate(${offset + 55}, 0)`);
+
+    legendItem.append("rect")
+            .attr("width", 14)
+            .attr("height", 14)
+            .attr("fill", vis.colorScale('Avalanche'));
+
+    legendItem.append("text")
+            .attr("x", 20)
+            .attr("y", 12)
+            .style("font-size", "12px")
+            .text('Avalanche');
+
+
+            
+    legendItem = vis.legend.append("g")
+                            .attr("transform", `translate(${offset + 140}, 0)`);
+
+    legendItem.append("rect")
+            .attr("width", 14)
+            .attr("height", 14)
+            .attr("fill", vis.colorScale('Aams'));
+
+    legendItem.append("text")
+            .attr("x", 20)
+            .attr("y", 12)
+            .style("font-size", "12px")
+            .text('Ams');
+
+    legendItem = vis.legend.append("g")
+                        .attr("transform", `translate(${offset + 190}, 0)`);
+
+    legendItem.append("rect")
+            .attr("width", 14)
+            .attr("height", 14)
+            .attr("fill", vis.colorScale('Illness (non-ams)'));
+
+    legendItem.append("text")
+            .attr("x", 20)
+            .attr("y", 12)
+            .style("font-size", "12px")
+            .text('Illness (non-ams)');
+
+    legendItem = vis.legend.append("g")
+                            .attr("transform", `translate(${offset + 310}, 0)`);
+
+    legendItem.append("rect")
+            .attr("width", 14)
+            .attr("height", 14)
+            .attr("fill", vis.colorScale('Disappearance (unexplained)'));
+
+    legendItem.append("text")
+            .attr("x", 20)
+            .attr("y", 12)
+            .style("font-size", "12px")
+            .text('Disappearance (unexplained)');
                             
+                                        
         // (Filter, aggregate, modify data)
         vis.wrangleData();
 
@@ -262,16 +348,6 @@ class Timeline {
             .style("font-size", "14px")
             .style("fill", "#333")
             .text("Year");
-
-        vis.svg.append("text")
-            .attr("class", "y-axis-label")
-            .attr("transform", "rotate(-90)")
-            .attr("x", -vis.height / 2)
-            .attr("y", -25)
-            .style("text-anchor", "middle")
-            .style("font-size", "14px")
-            .style("fill", "#333")
-            .text("Number of Deaths");
 
 	}
 }
