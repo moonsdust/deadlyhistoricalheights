@@ -77,20 +77,40 @@ function setupStackedAreaChartData(data) {
         years: []
     };
 
+    const minYear = 1905, maxYear = 2019;
+
     let yearMap = {}; 
     let causeMap = {};
-    const minYear = 1905, maxYear = 2019;
+    let totalCauseCounts = {};
+
+    data.forEach(d => {
+        let rawCause = d.death_cause?.trim().toLowerCase();
+        if (!rawCause || rawCause === "na") return;
+
+        let cause = rawCause.charAt(0).toUpperCase() + rawCause.slice(1);
+        totalCauseCounts[cause] = (totalCauseCounts[cause] || 0) + 1;
+    });
+
+    let topCauses = Object.entries(totalCauseCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([cause]) => cause);
 
     data.forEach(d => {
         let year = parseInt(d.year);
-        let cause = d.death_cause?.trim().toLowerCase();
+        if (isNaN(year) || year < minYear || year > maxYear) return;
 
-        if (cause === "na") return;
+        let rawCause = d.death_cause?.trim().toLowerCase();
+        if (!rawCause || rawCause === "na") return;
+
+        let cause = rawCause.charAt(0).toUpperCase() + rawCause.slice(1);
+
+        if (!topCauses.includes(cause)) return;
 
         if (!yearMap[year]) {
             yearMap[year] = { Year: parseDate(year.toString()), TotalDeaths: 0 };
         }
-        
+
         if (!causeMap[year]) {
             causeMap[year] = { Year: parseDate(year.toString()) };
         }
@@ -99,21 +119,25 @@ function setupStackedAreaChartData(data) {
         yearMap[year].TotalDeaths += 1;
     });
 
-    let allCauses = new Set(data.map(d => d.death_cause?.trim().toLowerCase()).filter(c => c && c !== "na"));
-
     for (let year = minYear; year <= maxYear; year++) {
         if (!causeMap[year]) {
             causeMap[year] = { Year: parseDate(year.toString()) };
         }
-        allCauses.forEach(cause => {
+
+        topCauses.forEach(cause => {
             if (!causeMap[year][cause]) {
                 causeMap[year][cause] = 0;
             }
         });
+
+        if (!yearMap[year]) {
+            yearMap[year] = { Year: parseDate(year.toString()), TotalDeaths: 0 };
+        }
     }
 
     preparedData.layers = Object.values(causeMap).sort((a, b) => a.Year - b.Year);
     preparedData.years = Object.values(yearMap).sort((a, b) => a.Year - b.Year);
+
     return preparedData;
 }
 
