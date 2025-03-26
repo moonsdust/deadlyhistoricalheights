@@ -11,7 +11,7 @@ body {
 }
 
 a {
-  color: #8396ae;
+  color: #c19191;
 }
 
 a:hover {
@@ -44,9 +44,16 @@ video {
 #hook p, .hook-text-section, .hook-quiz-section h5, #credits p, #credits ul{
   color: #eeeeee;
 }
+
 .title-sections {
   margin-top: 1vh;
   margin-bottom: 1vh;
+}
+
+.title-sections h2 {
+  border: 2px dashed #ced4da;
+  padding: 15px;
+  background-color: #ffffff31;
 }
 
 #hook h2, .title-sections {
@@ -112,7 +119,7 @@ video {
 
 /* Solutions Section Items */
 .solution-item {
-  border: 1px solid #ced4da;
+  border: 2px dashed #ced4da;
   padding: 15px;
   margin-bottom: 20px;
   background-color: #f1f3f5;
