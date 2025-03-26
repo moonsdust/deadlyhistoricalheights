@@ -18,12 +18,40 @@ a:hover {
   color: #0570b0;
 }
 
-/* Vertical spacing for sections */
+video {
+  width: 130%; 
+  height: 90%;
+}
+
+/* Sections */
+.container {
+  width: 100%;
+}
+
+.hook-text-section {
+  padding: 50px 50px 0px 50px;
+}
+.hook-quiz-section {
+  display: flex;
+  flex-direction: column;
+  padding: 10vh 60px 10vh 60px;
+  background-color: #000000;
+}
+.hook-quiz-section h5 {
+  color: #eeeeee;
+}
+.title-sections {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+}
 .section-gap {
   margin-top: 40px;
   margin-bottom: 40px;
-  padding: 20px;
   background-color: #ffffff;
+}
+
+.title-sections, .section-gap {
+  padding: 100px
 }
 
 /* Flex layout for visualization and description pairs */
