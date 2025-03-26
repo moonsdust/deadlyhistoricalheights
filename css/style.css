@@ -65,7 +65,7 @@ video {
 }
 
 .title-sections, .section-gap, #credits {
-  padding: 100px
+  padding: 90px
 }
 
 /* Flex layout for visualization and description pairs */
@@ -108,7 +108,10 @@ video {
   background-color: #f1f3f5;
 }
 
-/* Dot graph texts */
+/* Dot graph */
+#categorySelectorDotGraph {
+  margin-bottom: 5%;
+}
 .text-for-sex, .text-for-sex-2 {
   display: block;
 }

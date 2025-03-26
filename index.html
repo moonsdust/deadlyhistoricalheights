@@ -151,21 +151,32 @@
       </div>
     </section>
     <!-- Visualization Pair 3 -->
-    <section data-aos="fade-up" data-aos-duration="3000" id="rising-insights" class="section-gap">
-      <div class = "description-title text-center">
-        <h3>Completed expeditions</h3>
-        <p>What are the age groups and genders of individuals who have completed Himalayan expeditions?</p>
-      </div>
-      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
+    <!-- <section data-aos="fade-up" data-aos-duration="3000" id="rising-insights" class="section-gap">
+    </section> -->
+  </section>
+
+  <!-- Main Message Section -->
+  <section data-aos="fade-in" data-aos-duration="3000" id="main-message" class="title-sections">
+    <h2 class="text-center">Climbing expeditions in the Himalayas: Factors & Outlook</h2>
+  </section>
+  <!-- Visualization Pair 1 -->
+  <section data-aos="fade-up" data-aos-duration="3000" id="main-message" class="section-gap">
+    <!--Category Select--> 
+    <p>Select a group to view statistics about them!</p>
+    <select id='categorySelectorDotGraph' class="custom-select align-self-center" style="width: 50%" onchange="categoryChangeDotGraph()">
+      <option value="sex" selected>Sex/Gender</option>
+      <option value="age_group">Age Group</option>
+    </select>  
+    <div class = "row">
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section col-md-6">
+        <div class = "description-title">
+          <h3>Completed expeditions</h3>
+          <p>What are the age groups and genders of individuals who have completed Himalayan expeditions?</p>
+        </div>
         <div class="viz" id="insight-viz-3">
           <!-- Rising insights visualization 3 placeholder -->
         </div> 
         <div class="description">
-          <!--Category Select-->   
-          <select id='categorySelectorDotGraph' class="custom-select align-self-center" style="width: 50%" onchange="categoryChangeDotGraph()">
-            <option value="sex" selected>Sex/Gender</option>
-            <option value="age_group">Age Group</option>
-          </select>  
           <div class = "text-for-sex">
             <p>Out of all the total successful expeditions, <strong>91.99%</strong> of the climbers were male while <strong>8.01%</strong> of the climbers were female.</p>
             <p>However, the success rate for both groups was almost equal with female climbers having a success rate of <strong>32.91%</strong> while for male climbers it was <strong>39.04%</strong>.</p>
@@ -176,30 +187,22 @@
           </div>
         </div>
       </div>
-    </section>
-  </section>
-
-  <!-- Main Message Section -->
-  <section data-aos="fade-in" data-aos-duration="3000" id="main-message" class="title-sections">
-    <h2 class="text-center">Climbing expeditions in the Himalayas: Factors & Outlook</h2>
-  </section>
-  <section data-aos="fade-up" data-aos-duration="3000" id="main-message" class="section-gap">
-    <!-- Visualization Pair 1 -->
-    <div data-aos="fade-in" data-aos-duration="3000" class="viz-section">
-      <div class = "description-title">
-        <h3>Supplemental Oxygen Use</h3>
-        <p>What percentage of climbers, across different age groups and genders, use supplemental oxygen during their expeditions?</p>
-      </div>
-      <div class="viz" id="main-viz-1">
-        <!-- Main message visualization 1 placeholder -->
-      </div> 
-      <div class="description"> 
-        <div class = "text-for-sex-2">
-          <p>Out of all expeditions, <strong>91.57%</strong> of oxygen used was by male climbers while only <strong>8.43%</strong> of were used by females climbers.</p>
-          <p>However, the oxygen use rate for both groups was close to equal with female climbers having a rate of <strong>21.91%</strong> while for male climbers it was <strong>24.59%</strong>.</p>
+      <div data-aos="fade-in" data-aos-duration="3000" class="viz-section col-md-6">
+        <div class = "description-title">
+          <h3>Supplemental Oxygen Use</h3>
+          <p>What percentage of climbers, across different age groups and genders, use supplemental oxygen during their expeditions?</p>
         </div>
-        <div class = "text-for-age-group-2">
-          <p>The age group that used the most oxygen was <strong>30 to 39 years old</strong>. However, the age group that had the highest rate of oxygen use was <strong>13 to 19 years old</strong>.</p>
+        <div class="viz" id="main-viz-1">
+          <!-- Main message visualization 1 placeholder -->
+        </div> 
+        <div class="description"> 
+          <div class = "text-for-sex-2">
+            <p>Out of all expeditions, <strong>91.57%</strong> of oxygen used was by male climbers while only <strong>8.43%</strong> of were used by females climbers.</p>
+            <p>However, the oxygen use rate for both groups was close to equal with female climbers having a rate of <strong>21.91%</strong> while for male climbers it was <strong>24.59%</strong>.</p>
+          </div>
+          <div class = "text-for-age-group-2">
+            <p>The age group that used the most oxygen was <strong>30 to 39 years old</strong>. However, the age group that had the highest rate of oxygen use was <strong>13 to 19 years old</strong>.</p>
+          </div>
         </div>
       </div>
     </div>
