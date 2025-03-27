@@ -49,23 +49,23 @@ class DeathRateChart {
 		vis.title = vis.svg.append("text")
             .attr("class", "vis-title-circular-barplot")
             .attr("text-anchor", "center")
-            .attr("x", -(vis.width/2.5))
+            .attr("x", -(vis.width/2.8))
             .attr("y", vis.height / 3)
             .style("font-size", 18)
             .style("font-weight", 600)
             .style("fill", "#525252")
             // .style("text-decoration","underline")
-            .text("Top 20 Mountain Peaks in the Himalayas with the Most Number of Deaths");
+            .text("Top 17 Mountain Peaks in the Himalayas with the Highest Death Rates");
         
         // Intialize subtitle
         vis.subtitle = vis.svg.append("text")
             .attr("class", "vis-subtitle-circular-barplot")
             .attr("text-anchor", "center")
-            .attr("x", -(vis.width/4))
+            .attr("x", -(vis.width/2.5))
             .attr("y", vis.height / 3 + vis.margin.top + vis.margin.bottom)
             .style("font-size", 14)
             .style("fill", "#666666")
-            .text("Length of arc depicts the death count of each mountain peak.");
+            .text("Length of arc depicts the death rate of each mountain peak. Peaks have greater than 190 total expeditions.");
         
         // Initalize tooltip
         vis.tooltip = d3.select("body").append('div')
@@ -97,7 +97,7 @@ class DeathRateChart {
             .attr("y", -(vis.height/2.3))
             .style("font-size", 14)
             .style("fill", "#666666")
-            .text("Number of deaths");
+            .text("Death Rate (Death count / total expeditions)");
 
         // Prepare data and then update visualization
         vis.wrangleData();
@@ -164,10 +164,13 @@ class DeathRateChart {
         vis.displayData = Array.from(new Map(vis.displayData.map(item => [item.peak_name, item])).values());
         
         // Sort in descending order by death count and then store in display array 
-        vis.displayData.sort((peak1, peak2) => peak2.death_count_peak - peak1.death_count_peak);
+        vis.displayData.sort((peak1, peak2) => peak2.death_rate - peak1.death_rate);
 
-        // Get only the top 20 peaks 
-        vis.displayData = vis.displayData.slice(0, 20);
+        // Filter only for peaks with more than 190 expeditions
+        vis.displayData = vis.displayData.filter((data => (data["expedition_count_peak"] > 190)))
+
+        // Get only the top 17 peaks 
+        vis.displayData = vis.displayData.slice(0, 17);
 
         // Set up object to store mountain peak info and color  
         vis.mountainInfoColor = {};
@@ -176,25 +179,25 @@ class DeathRateChart {
     updateVis() {
         let vis = this;
         // Visualization is a circular barplot
-        // Length of the bars on the outside = death_count_peak (Would be in red)        
+        // Length of the bars on the outside = death_rate (Would be in red)        
         // Referenced: https://d3-graph-gallery.com/graph/circular_barplot_double.html
 
         // Define x scale's domain 
         vis.x.domain(vis.displayData.map(d => d.peak_name)); // The domain is the name of the peaks
 
         // Define y scale's domain
-        // The domain is 0 to the max of death_count_peak
-        vis.yOuter.domain([0, d3.max(vis.displayData, d=> d.death_count_peak)]);
+        // The domain is 0 to the max of death_rate
+        vis.yOuter.domain([0, d3.max(vis.displayData, d=> d.death_rate)]);
 
         // Update domain for colour
-        vis.color.domain([(d3.min(vis.displayData, d => d.death_count_peak)), 
-        d3.max(vis.displayData, d => d.death_count_peak)]);
+        vis.color.domain([(d3.min(vis.displayData, d => d.death_rate)), 
+        d3.max(vis.displayData, d => d.death_rate)]);
         
         // Draw the bars - outer 
         // Arc path generator 
         vis.arcOuter = d3.arc()     
             .innerRadius(vis.innerRadius)
-            .outerRadius(d => vis.yOuter(d.death_count_peak))
+            .outerRadius(d => vis.yOuter(d.death_rate))
             .startAngle(d => vis.x(d.peak_name))
             .endAngle(d => vis.x(d.peak_name) + vis.x.bandwidth())
             .padRadius(vis.innerRadius)
@@ -214,7 +217,7 @@ class DeathRateChart {
                 for (let i = 0; i < vis.displayData.length; i++) {
                     if (vis.displayData[i].peak_name == d.peak_name) {
                         // Assign colour to peak
-                        vis.displayData[i].color = vis.color(vis.displayData[i].death_count_peak);
+                        vis.displayData[i].color = vis.color(vis.displayData[i].death_rate);
                         // Store mountain info and colour
                         vis.mountainInfoColor[vis.displayData[i].peak_name] = vis.displayData[i]; 
                         return vis.displayData[i].color;
@@ -289,7 +292,7 @@ class DeathRateChart {
                         // Figure out if the text should be rotated upside down
                         let flipRotation = ((vis.x(d.peak_name) + vis.x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI) ? 180 : 0;
                         let finalAngle = angle + flipRotation;
-                        let radius = vis.yOuter(d.death_count_peak) + 20;
+                        let radius = vis.yOuter(d.death_rate) + 20;
                         return `translate(${Math.cos(angle * Math.PI / 180) * radius}, ${Math.sin(angle * Math.PI / 180) * radius}) rotate(${finalAngle})`;
                     })
                     .style("font-size", "16px")
@@ -299,13 +302,12 @@ class DeathRateChart {
         labelsForBars.exit().remove();
 
         // Define domain of legend 
-        vis.legendScale.domain([(d3.min(vis.displayData, d => d.death_count_peak)), 
-            d3.max(vis.displayData, d => d.death_count_peak)]);
+        vis.legendScale.domain([0.4, d3.max(vis.displayData, d => d.death_rate)]);
 
         // Create legend axis 
         vis.legendAxis = d3.axisBottom()
             .scale(vis.legendScale)
-            .tickValues([d3.min(vis.displayData, d => d.death_count_peak), d3.max(vis.displayData, d => d.death_count_peak)]);
+            .tickValues([d3.min(vis.displayData, d => d.death_rate), d3.max(vis.displayData, d => d.death_rate)]);
     
         // Call the legend axis inside the legend axis group
         // Update the legend 
