@@ -177,7 +177,7 @@ class StackedAreaChart {
     legendItem.append("rect")
             .attr("width", 14)
             .attr("height", 14)
-            .attr("fill", vis.colorScale('Aams'));
+            .attr("fill", vis.colorScale('Ams'));
 
     legendItem.append("text")
             .attr("x", 20)
