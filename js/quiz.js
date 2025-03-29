@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const quizContainer = document.getElementById("hook-quiz");
 
-    // Updated quizData with failMsg included (see above)
+    // Quiz data with failMsg included for each question
     const quizData = [
         {
             question: "What season are you planning to go on your expedition?",
@@ -46,13 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     ? questionData.correct
                     : [questionData.correct];
 
-                // If user picks the wrong answer, show fail message immediately
+                // If the answer is wrong, show the fail message with a Next Question and a Redo Quiz button
                 if (!correctAnswers.includes(selectedAnswer)) {
                     showFailMessage(questionData.failMsg);
-                    return; // Stop the quiz
+                    return;
                 }
 
-                // Otherwise, user is correct—move to next question
+                // If correct, transition to the next question
                 transitionToNextQuestion();
             });
         });
@@ -67,28 +67,49 @@ document.addEventListener("DOMContentLoaded", function () {
             if (currentQuestionIndex < quizData.length) {
                 showQuestion();
             } else {
-                // All questions answered correctly
+                // All questions completed
                 showSuccessMessage();
             }
         }, 500);
     }
 
-    // Show an immediate fail message and stop the quiz
+    // Show fail message with Next Question and Redo Quiz buttons
     function showFailMessage(failMsg) {
         quizContainer.innerHTML = `
             <div class="quiz-content fade-in">
                 <h3>${failMsg}</h3>
+                <button id="next-question-btn">Next Question</button>
+                <button id="redo-btn">Redo Quiz</button>
             </div>
         `;
+
+        document.getElementById("next-question-btn").addEventListener("click", function() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                showQuestion();
+            } else {
+                showSuccessMessage();
+            }
+        });
+        document.getElementById("redo-btn").addEventListener("click", resetQuiz);
     }
 
-    // Show a success message if all answers are correct
+    // Show a final success message with a Redo Quiz button
     function showSuccessMessage() {
         quizContainer.innerHTML = `
             <div class="quiz-content fade-in">
-                <h3>Great job! You seem to have done your homework for this expedition! Scroll down to learn more about Himalayan expeditions</h3>
+                <h3>You have a basic understanding of the expedition requirements. Scroll down to learn more and good luck with your journey!</h3>
+                <button id="redo-btn">Redo Quiz</button>
             </div>
         `;
+
+        document.getElementById("redo-btn").addEventListener("click", resetQuiz);
+    }
+
+    // Reset the quiz to its initial state and start over
+    function resetQuiz() {
+        currentQuestionIndex = 0;
+        showQuestion();
     }
 
     // Start the quiz
