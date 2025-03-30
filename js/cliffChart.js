@@ -131,26 +131,17 @@ class CliffChart {
         this.drawMountainBackground();
     }
 
-    /**
-     * drawMountainBackground()
-     *   Inserts an image to serve as a realistic mountain background.
-     *   Replace the image URL below with the path to your preferred mountain image.
-     */
     drawMountainBackground() {
         this.scatterG.insert("image", ":first-child")
-            .attr("xlink:href", "images/mountain.png") // Replace with your image URL or file path
+            .attr("xlink:href", "images/mountain.png")
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", this.width)
             .attr("height", this.scatterChartHeight)
             .attr("preserveAspectRatio", "xMidYMid slice")
-            .attr("filter", "url(#blurFilter)"); // Apply blur filter
+            .attr("filter", "url(#blurFilter)");
     }
 
-    /**
-     * startFlow()
-     *   Begins the step-by-step process of adding data points.
-     */
     startFlow() {
         this.flowStep();
     }
@@ -186,18 +177,16 @@ class CliffChart {
         const dots = this.scatterG.selectAll(".dot")
             .data(this.partialData, d => d.year);
 
-        // ENTER: new dots
         const dotsEnter = dots.enter()
             .append("circle")
             .attr("class", "dot")
             .attr("cx", d => this.xScaleScatter(d.year))
             .attr("cy", -20)  // Start above the scatter area
-            .attr("r", 3)     // Smaller dot
-            .attr("fill", "lightblue"); // Red color
+            .attr("r", 4)     // Smaller dot
+            .attr("fill", "white");
 
-        // Animate the dot falling to its final position faster
         dotsEnter.transition()
-            .duration(100)  // Faster animation
+            .duration(100)
             .attr("cy", d => this.yScaleScatter(d.deathCount));
     }
 }
