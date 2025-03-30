@@ -12,7 +12,7 @@ Along the border between India, Nepal and China, the Himalayas are a popular mou
 
 
 ## Project Structure
-All code in this project are owned by the specified authors above.
+All code in this project belong to the specified authors above.
 
 - `css/`: contains the custom styling sheets 
 - `data/`: contains the cleaned datasets
