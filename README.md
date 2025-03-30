@@ -20,7 +20,7 @@ All code in this project belongs to the specified authors above.
 - `data/`: contains the cleaned datasets
 - `images/`: contains images used by webpage (credited in the footer of the page)
 - `index.html`: html root file of the page
-- `js/`: all the logicical js files 
+- `js/`: all the logical js files 
     - `main.js`: controller for initializing visualizations and general scripts
     - `titlePageAnimation.js`: animation for title page portion
     - `navigation.js`: general navigation logic
