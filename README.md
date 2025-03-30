@@ -2,8 +2,8 @@
 
 **Authors**: , [Emily Su](https://github.com/moonsdust), [Fardin Faruk](https://github.com/Fard-Faru), and [Wenzhuoyi (Tom) Li](https://github.com/TheTomLi)
 
-- URL to website: https://moonsdust.github.io/deadlyhistoricalheights/
-- URL to video: 
+- Website URL: https://moonsdust.github.io/deadlyhistoricalheights/
+- Video URL: 
 
 
 ## Description
