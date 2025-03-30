@@ -1,6 +1,6 @@
 # The Deadly Historical Heights: A Deep Dive into Climber Mortality in the Himalayas
 
-**Authors**: , [Emily Su](https://github.com/moonsdust), [Fardin Faruk](https://github.com/Fard-Faru), and [Wenzhuoyi (Tom) Li](https://github.com/TheTomLi)
+**Authors**: [Emily Su](https://github.com/moonsdust), [Fardin Faruk](https://github.com/Fard-Faru), and [Wenzhuoyi (Tom) Li](https://github.com/TheTomLi)
 
 - Website URL: https://moonsdust.github.io/deadlyhistoricalheights/
 - Video URL: 
@@ -14,7 +14,7 @@ Due to the increasing numbers of reported deaths in the Himalayas, this motivate
 
 
 ## Project Structure
-All code in this project belong to the specified authors above.
+All code in this project belongs to the specified authors above.
 
 - `css/`: contains the custom styling sheets 
 - `data/`: contains the cleaned datasets
