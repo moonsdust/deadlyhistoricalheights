@@ -104,8 +104,8 @@ video {
 
 .quiz {
   padding: 15px;
-  border: 1px solid #ced4da;
-  background-color: #f1f3f5;
+  /* border: 1px solid #ced4da;
+  background-color: #f1f3f5; */
 }
 
 /* Dot graph */
@@ -177,7 +177,7 @@ h1, h2, h3, h4, h5 {
   font-size: 1rem;
   font-weight: 500;
   color: #fff;
-  background-color: #007bff; /* Bootstrap primary blue */
+  background-color: #c19191;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -185,7 +185,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .quiz-btn:hover {
-  background-color: #0056b3; /* darker blue on hover */
+  background-color: #8c6868;
 }
 
 /* Fade-in animation */

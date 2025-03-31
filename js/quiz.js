@@ -78,8 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
         quizContainer.innerHTML = `
             <div class="quiz-content fade-in">
                 <h3>${failMsg}</h3>
-                <button id="next-question-btn">Next Question</button>
-                <button id="redo-btn">Redo Quiz</button>
+                <button id="next-question-btn" class="quiz-btn">Next Question</button>
+                <button id="redo-btn" class="quiz-btn">Redo Quiz</button>
             </div>
         `;
 
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
         quizContainer.innerHTML = `
             <div class="quiz-content fade-in">
                 <h3>You have a basic understanding of the expedition requirements. Scroll down to learn more and good luck with your journey!</h3>
-                <button id="redo-btn">Redo Quiz</button>
+                <button id="redo-btn" class="quiz-btn">Redo Quiz</button>
             </div>
         `;
 
