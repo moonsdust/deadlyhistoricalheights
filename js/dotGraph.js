@@ -17,7 +17,7 @@ class DotGraph {
         this.height = 400 - this.margin.top - this.margin.bottom;
 
         // Controls the colors 
-        this.colors = ["#2166ac", "#c994c7","#d6604d","#f4a582", "#fddbc7", "#d1e5f0","#92c5de","#4393c3","#b2182b"];
+        this.colors = ["#2166ac", "#c994c7","#d6604d","#f4a582", "#8856a7", "#9ebcda","#92c5de","#4393c3","#b2182b"];
 
         // Initialize the visualization
         this.initVis();
@@ -321,10 +321,13 @@ class DotGraph {
 
         // Add event listener to each circle
         vis.circles.on('mousemove', function(event, d){
+            // Change the opacity of all circles
+            vis.circles.style("opacity", 0.5)
             // Changes the stroke and fill of the bar that is hovered over
             d3.select(this) // This is now referring to the actual circle that is hovered over 
                 .attr('stroke-width', '4px')
-            // Display info when country is hovered over
+                .style("opacity", 1)
+            // Display info when circle is hovered over
             vis.tooltip
                 .style("opacity", 1)
                 .style("left", event.pageX + 20 + "px")
@@ -350,6 +353,8 @@ class DotGraph {
                 // Resets everything
                 d3.select(this)
                     .attr('stroke-width', '2px')
+                // Change the opacity of all circles back to 1
+                vis.circles.style("opacity", 1)
                 vis.tooltip
                     .style("opacity", 0)
                     .style("left", 0)

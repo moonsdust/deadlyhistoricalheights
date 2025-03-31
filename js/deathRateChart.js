@@ -241,12 +241,15 @@ class DeathRateChart {
 
         // Add event listener to each outside bar
         vis.outsideBars.on('mousemove', function(event, d){
+            // Change the opacity of all bars
+            vis.outsideBars.style("opacity", 0.5)
             // Changes the stroke and fill of the bar that is hovered over
-            d3.select(this) // This is now referring to the actual country that is hovered over 
+            d3.select(this) // This is now referring to the actual bar that is hovered over 
                 .attr('stroke-width', '4px')
                 .attr('stroke', 'white')
                 .attr('fill', '#b17485')
-            // Display info when country is hovered over
+                .style("opacity", 1)
+            // Display info when bar is hovered over
             vis.tooltip
                 .style("opacity", 1)
                 .style("left", event.pageX + 20 + "px")
@@ -260,6 +263,8 @@ class DeathRateChart {
 
             })
             .on('mouseout', function(event, d){
+                // Change the opacity of all bars back to 1
+                vis.outsideBars.style("opacity", 1)
                 // Resets everything
                 d3.select(this)
                     .attr('stroke-width', '0px')
