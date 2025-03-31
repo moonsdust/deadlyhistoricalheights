@@ -23,6 +23,10 @@ video {
   height: 90%;
 }
 
+h3 {
+  color: #937070;
+}
+
 /* Sections */
 .container {
   width: 100%;
@@ -82,7 +86,7 @@ video {
 .viz {
   flex: 1;
   min-height: 300px;
-  background-color: #e9ecef;
+  /* background-color: #e9ecef; */
   border: 2px dashed #ced4da;
   display: flex;
   align-items: center;
@@ -111,6 +115,8 @@ video {
 /* Dot graph */
 #categorySelectorDotGraph {
   margin-bottom: 5%;
+  background-color: #fdfdfd;
+  border: 2px dashed #ced4da;
 }
 .text-for-sex, .text-for-sex-2 {
   display: block;
@@ -184,8 +190,24 @@ h1, h2, h3, h4, h5 {
   transition: background-color 0.3s ease;
 }
 
-.quiz-btn:hover {
+/* For reveal button */
+#reveal-btn, .btn, .btn-success{
+  background-color: #c19191;
+  border: none;
+}
+
+.quiz-btn:hover, #reveal-btn:hover, .btn:hover, .btn-success:hover{
   background-color: #8c6868;
+  border-color: #c19191;
+}
+
+
+.btn-success:focus, .btn-success:active{
+  box-shadow: 0 0 0 .2rem #c19191;
+}
+
+.btn-success:not(:disabled):not(.disabled):active:focus {
+  box-shadow: 0 0 0 .2rem #c19191;
 }
 
 /* Fade-in animation */
