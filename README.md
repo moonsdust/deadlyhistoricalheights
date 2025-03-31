@@ -10,7 +10,7 @@
 
 Along the border between India, Nepal and China, the Himalayas are a popular mountain range system for mountaineers and researchers due to their scenic environment, being the freshwater source for many across Asia, and being at the forefront of understanding the impacts of climate change. Mount Everest, the highest point on Earth, is situated in the Himalayas and is a prominent expedition spot for people seeking a challenge. However, BBC reported on July 19, 2024, in their article, [“How bodies of frozen climbers were finally recovered from Everest 'death zone'”](https://www.bbc.com/news/articles/c9r31g50xqdo), that the death toll has been increasing each year on mountains like Mount Everest, especially in the Death Zone, which is a region above 8000m from the ground where there isn’t enough oxygen to sustain life. 
 
-Due to the increasing numbers of reported deaths in the Himalayas, this motivates what we plan to do for our project, which is to understand various factors such as the use of oxygen and the season that contributes to the survival of climbers.
+Due to the increasing number of reported deaths in the Himalayas, this motivates our project, which is to understand various factors, such as the use of oxygen and the season, that contribute to the survival of climbers.
 
 
 ## Project Structure
@@ -25,7 +25,7 @@ All code in this project belongs to the specified authors above.
     - `titlePageAnimation.js`: animation for title page portion
     - `navigation.js`: general navigation logic
     - `cliffChart.js`: scatterplot for death count and years
-    - `deathRateChart.js`: circular bar plot for death rates of cliffs
+    - `deathRateChart.js`: circular bar plot for death rates of different mountain peaks
     - `dotGraph.js`: dot plot visualization for multiple demographics
     - `guessLineChart.js`: interactive line chart for moving average of death rate
     - `quiz.js`: hook section quiz functionality
