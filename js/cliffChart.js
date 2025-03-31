@@ -86,7 +86,8 @@ class CliffChart {
             .attr("class", "x-axis-label")
             .attr("text-anchor", "middle")
             .attr("x", this.width / 2)
-            .attr("y", scatterChartHeight + this.margin.bottom + 10)
+            .attr("y", scatterChartHeight + this.margin.bottom + 20)
+            .style("fill", "#666666")
             .text("Year");
 
         this.scatterG.append("text")
@@ -94,7 +95,8 @@ class CliffChart {
             .attr("text-anchor", "middle")
             .attr("transform", "rotate(-90)")
             .attr("x", -scatterChartHeight / 2)
-            .attr("y", -this.margin.left + 15)
+            .attr("y", -this.margin.left + 12)
+            .style("fill", "#666666")
             .text("Death Count");
         
         this.drawMountainBackground();

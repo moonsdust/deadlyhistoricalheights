@@ -242,7 +242,7 @@ class DeathRateChart {
         // Add event listener to each outside bar
         vis.outsideBars.on('mousemove', function(event, d){
             // Change the opacity of all bars
-            vis.outsideBars.style("opacity", 0.5)
+            vis.outsideBars.style("opacity", 0.2)
             // Changes the stroke and fill of the bar that is hovered over
             d3.select(this) // This is now referring to the actual bar that is hovered over 
                 .attr('stroke-width', '4px')

@@ -77,8 +77,8 @@ class GuessLineChart {
 
         vis.svg.append("text")
                 .attr("class", "x-axis-label")
-                .attr("x", vis.width / 2)
-                .attr("y", vis.height + 55)
+                .attr("x", vis.width / 1.7)
+                .attr("y", vis.height + 59)
                 .style("text-anchor", "middle")
                 .style("font-size", "14px")
                 .style("fill", "#333")

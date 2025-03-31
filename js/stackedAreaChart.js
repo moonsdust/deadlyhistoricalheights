@@ -151,6 +151,7 @@ class StackedAreaChart {
         .attr("x", 20)
         .attr("y", 12)
         .style("font-size", "12px")
+        .style("fill", "#666666")
         .text('Fall');
 
 
@@ -167,6 +168,7 @@ class StackedAreaChart {
             .attr("x", 20)
             .attr("y", 12)
             .style("font-size", "12px")
+            .style("fill", "#666666")
             .text('Avalanche');
 
 
@@ -183,6 +185,7 @@ class StackedAreaChart {
             .attr("x", 20)
             .attr("y", 12)
             .style("font-size", "12px")
+            .style("fill", "#666666")
             .text('Ams');
 
     legendItem = vis.legend.append("g")
@@ -197,6 +200,7 @@ class StackedAreaChart {
             .attr("x", 20)
             .attr("y", 12)
             .style("font-size", "12px")
+            .style("fill", "#666666")
             .text('Illness (non-ams)');
 
     legendItem = vis.legend.append("g")
@@ -211,6 +215,7 @@ class StackedAreaChart {
             .attr("x", 20)
             .attr("y", 12)
             .style("font-size", "12px")
+            .style("fill", "#666666")
             .text('Disappearance (unexplained)');
                             
                                         

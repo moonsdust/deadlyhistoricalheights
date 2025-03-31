@@ -322,7 +322,7 @@ class DotGraph {
         // Add event listener to each circle
         vis.circles.on('mousemove', function(event, d){
             // Change the opacity of all circles
-            vis.circles.style("opacity", 0.5)
+            vis.circles.style("opacity", 0.2)
             // Changes the stroke and fill of the bar that is hovered over
             d3.select(this) // This is now referring to the actual circle that is hovered over 
                 .attr('stroke-width', '4px')
